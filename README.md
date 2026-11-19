@@ -8,6 +8,31 @@ An audiophile web workstation and YouTube player built with an absolute **Zero-A
 
 ---
 
+## Interface Overview
+
+### 1. Main Dashboard
+The command center featuring the dedicated video playback stage, live YouTube ingest stream, instant search/URL bar, bit-perfect volume mastering meters, and active playback controls.
+
+<p align="center">
+  <img src="docs/screenshots/dashboard.jpg" alt="StrictQueue Main Dashboard" width="100%" style="border-radius: 8px;" />
+</p>
+
+### 2. Queue Management
+The deterministic sequential playback rack. Manage upcoming tracks, paste direct YouTube links or IDs (`+ Quick Add`), reorder rows with drag handles, configure loop/shuffle, and inspect duplicate detection alerts.
+
+<p align="center">
+  <img src="docs/screenshots/queue-management.jpg" alt="StrictQueue Queue Management" width="100%" style="border-radius: 8px;" />
+</p>
+
+### 3. System & Playback Preferences (Settings Panel)
+Fine-tune playback behaviors, theme engines (Audiophile Dark, Studio Deep Slate, High Contrast OLED, Light Studio), ambient aura lighting, session persistence, zero-key/custom API settings, and backup exports.
+
+<p align="center">
+  <img src="docs/screenshots/settings-panel.jpg" alt="StrictQueue System Preferences and Settings Panel" width="100%" style="border-radius: 8px;" />
+</p>
+
+---
+
 ## Key Highlights
 
 - **Strict Zero-Autoplay Engine**: Blocks algorithmic recommendations, related video feeds, and automatic continuations. Playback strictly follows the user queue.
