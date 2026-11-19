@@ -1,5 +1,9 @@
 # StrictQueue (QueueTune v2.4 Studio)
 
+<p align="center">
+  <img src="logo.jpg" alt="StrictQueue Workstation Banner" width="100%" style="border-radius: 12px; max-width: 800px;" />
+</p>
+
 An audiophile web workstation and YouTube player built with an absolute **Zero-Autoplay Guarantee**: only songs explicitly queued by the user ever play, and audio halts with complete silence when the queue ends.
 
 ---
