@@ -1,0 +1,38 @@
+{
+  "name": "StrictQueue • No Autoplay, Strict Play",
+  "short_name": "StrictQueue",
+  "description": "Audiophile manual queue music player with strict zero-autoplay compliance.",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#050706",
+  "background_color": "#050706",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["music", "entertainment", "audio"],
+  "shortcuts": [
+    {
+      "name": "Now Playing",
+      "url": "/#view=now-playing",
+      "description": "Open Now Playing workstation view"
+    },
+    {
+      "name": "Manual Queue",
+      "url": "/#view=queue",
+      "description": "View and manage active track queue"
+    }
+  ]
+}

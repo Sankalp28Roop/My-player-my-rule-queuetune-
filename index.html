@@ -1,0 +1,2386 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><title>StrictQueue • No Autoplay, Strict Play</title><link rel="icon" type="image/jpeg" href="logo.jpg"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#050706"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="StrictQueue"><link rel="apple-touch-icon" href="logo.jpg"><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_standard" name="shell-type"><meta http-equiv="X-Content-Type-Options" content="nosniff"><meta name="referrer" content="strict-origin-when-cross-origin"><meta http-equiv="Permissions-Policy" content="microphone=(self), camera=(), geolocation=()"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://www.youtube.com https://s.ytimg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://i.ytimg.com https://lh3.googleusercontent.com; media-src 'self' blob:; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; connect-src 'self' https://www.googleapis.com https://generativelanguage.googleapis.com https://lrclib.net https://pipedapi.kavin.rocks https://inv.nadeko.net https://vid.puffyan.us; worker-src 'self' blob:;"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@100..900&amp;family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet"><style>
+@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}
+::-webkit-scrollbar{display:none;}
+
+/* --- THEME CSS CUSTOM PROPERTIES --- */
+:root {
+  /* 1. Audiophile Dark (Default) */
+  --bg-primary: #050706;
+  --bg-card: #0D110F;
+  --bg-elevated: #151B18;
+  --border-subtle: #1F2923;
+  --text-primary: #FFFFFF;
+  --text-secondary: #8E9B94;
+  --accent-primary: #00FF66;
+  --accent-secondary: #10B981;
+  --accent-glow: rgba(0, 255, 102, 0.35);
+}
+
+html[data-theme="slate"] {
+  /* 2. Studio Deep Slate */
+  --bg-primary: #0B0E17;
+  --bg-card: #131826;
+  --bg-elevated: #1C2336;
+  --border-subtle: #2A344D;
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --accent-primary: #38BDF8;
+  --accent-secondary: #818CF8;
+  --accent-glow: rgba(56, 189, 248, 0.35);
+}
+
+html[data-theme="oled"] {
+  /* 3. High Contrast OLED */
+  --bg-primary: #000000;
+  --bg-card: #050505;
+  --bg-elevated: #111111;
+  --border-subtle: #262626;
+  --text-primary: #FFFFFF;
+  --text-secondary: #A3A3A3;
+  --accent-primary: #D8B4FE;
+  --accent-secondary: #FFFFFF;
+  --accent-glow: rgba(216, 180, 254, 0.35);
+}
+
+html[data-theme="light"], html:not(.dark) {
+  /* 4. Light Studio */
+  --bg-primary: #F3F4F6;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #E5E7EB;
+  --border-subtle: #D1D5DB;
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --accent-primary: #4F46E5;
+  --accent-secondary: #059669;
+  --accent-glow: rgba(79, 70, 229, 0.25);
+}
+
+/* Base Body & Surfaces */
+body {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+header, footer {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-subtle) !important;
+}
+
+.amoled-border {
+  border-color: var(--border-subtle) !important;
+}
+
+/* Theme variable utilities applied across Tailwind classes */
+.bg-surface, .bg-surface-dim, .bg-surface-container-lowest {
+  background-color: var(--bg-primary) !important;
+}
+.bg-surface-container-low, .bg-surface-container {
+  background-color: var(--bg-card) !important;
+}
+.bg-surface-container-high, .bg-surface-container-highest, .bg-surface-bright {
+  background-color: var(--bg-elevated) !important;
+}
+
+.text-on-surface, .text-white {
+  color: var(--text-primary) !important;
+}
+.text-on-surface-variant, .text-outline {
+  color: var(--text-secondary) !important;
+}
+
+/* Accents */
+.text-primary, .text-tertiary {
+  color: var(--accent-primary) !important;
+}
+.bg-primary, .bg-primary-container, .bg-tertiary {
+  background-color: var(--accent-primary) !important;
+  color: #000000 !important;
+}
+html[data-theme="light"] .bg-primary,
+html[data-theme="light"] .bg-primary-container,
+html[data-theme="light"] .bg-tertiary {
+  color: #FFFFFF !important;
+}
+
+.border-primary, .ring-primary {
+  border-color: var(--accent-primary) !important;
+}
+
+.bg-primary\/10, .bg-primary\/20, .bg-primary-container\/20, .bg-tertiary\/10 {
+  background-color: var(--accent-glow) !important;
+}
+
+.neon-glow {
+  box-shadow: 0 0 16px -2px var(--accent-glow) !important;
+}
+.neon-glow-lg {
+  box-shadow: 0 0 24px -2px var(--accent-glow) !important;
+}
+
+/* Nav Pills */
+.tab-active {
+  background-color: var(--bg-elevated) !important;
+  color: var(--accent-primary) !important;
+  font-weight: 600 !important;
+  box-shadow: 0 0 12px -2px var(--accent-glow) !important;
+}
+.tab-inactive {
+  background-color: transparent !important;
+  color: var(--text-secondary) !important;
+}
+.tab-inactive:hover {
+  background-color: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Ambient Glow for Video Stage */
+.ambient-glow-active {
+  box-shadow: 0 0 45px -5px var(--accent-glow), 0 0 20px -2px var(--accent-glow) !important;
+  transition: box-shadow 0.4s ease;
+}
+
+/* Hardware Mastering Meters */
+.eq-bar {
+  background-color: var(--accent-primary) !important;
+  transition: height 0.15s ease, background-color 0.3s ease;
+}
+
+/* Theme Selector Cards */
+.theme-card-active {
+  border: 2px solid var(--accent-primary) !important;
+  box-shadow: 0 0 18px var(--accent-glow) !important;
+}
+.theme-card-inactive {
+  border: 1px solid var(--border-subtle) !important;
+  box-shadow: none !important;
+}
+
+/* Hardware-Accelerated YouTube Player & Zero-Stutter Overlays */
+#video-theater-container {
+  contain: layout paint;
+}
+#yt-player-target, #yt-player-target iframe {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
+}
+#video-theater-container #video-poster,
+#video-theater-container #video-vignette {
+  pointer-events: none !important;
+}
+</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{
+  "surface": "#000000",
+  "surface-dim": "#000000",
+  "surface-bright": "#1F1F1F",
+  "surface-container-lowest": "#000000",
+  "surface-container-low": "#080808",
+  "surface-container": "#0D0D0D",
+  "surface-container-high": "#141414",
+  "surface-container-highest": "#1C1C1C",
+  "on-surface": "#EDEDED",
+  "on-surface-variant": "#9E9E9E",
+  "inverse-surface": "#F2F2F2",
+  "inverse-on-surface": "#121212",
+  "outline": "#404040",
+  "outline-variant": "#1F1F1F",
+  "surface-tint": "#00FF66",
+  "primary": "#00FF66",
+  "on-primary": "#000000",
+  "primary-container": "#00CC52",
+  "on-primary-container": "#000000",
+  "inverse-primary": "#003814",
+  "secondary": "#33FF85",
+  "on-secondary": "#000000",
+  "secondary-container": "#00471B",
+  "on-secondary-container": "#85FFB8",
+  "tertiary": "#00FF66",
+  "on-tertiary": "#000000",
+  "tertiary-container": "#00CC52",
+  "on-tertiary-container": "#000000",
+  "error": "#FF4444",
+  "on-error": "#000000",
+  "error-container": "#4A0000",
+  "on-error-container": "#FFD0D0",
+  "primary-fixed": "#00FF66",
+  "primary-fixed-dim": "#00CC52",
+  "on-primary-fixed": "#000000",
+  "on-primary-fixed-variant": "#004D1A",
+  "secondary-fixed": "#85FFB8",
+  "secondary-fixed-dim": "#33FF85",
+  "on-secondary-fixed": "#002B0F",
+  "on-secondary-fixed-variant": "#00471B",
+  "tertiary-fixed": "#85FFB8",
+  "tertiary-fixed-dim": "#00FF66",
+  "on-tertiary-fixed": "#002B0F",
+  "on-tertiary-fixed-variant": "#00471B",
+  "background": "#000000",
+  "on-background": "#EDEDED",
+  "surface-variant": "#141414"
+},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"gutter-desktop":"1.5rem","margin":"1rem","space-md":"1rem","space-xl":"2rem","margin-desktop":"2rem","gutter":"1rem","space-xs":"0.25rem","space-sm":"0.5rem","space-lg":"1.5rem"},"fontFamily":{"headline-lg":["Outfit"],"label-md":["Outfit"],"headline-sm":["Outfit"],"headline-md":["Outfit"],"body-sm":["Manrope"],"body-md":["Manrope"],"headline-xl-mobile":["Outfit"],"headline-xl":["Outfit"],"label-sm":["Outfit"],"headline-lg-mobile":["Outfit"],"technical-mono":["Manrope"],"body-lg":["Manrope"]},"fontSize":{"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"700"}],"label-md":["13px",{"lineHeight":"16px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"24px","fontWeight":"600"}],"headline-md":["22px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-xl-mobile":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"800"}],"headline-xl":["44px",{"lineHeight":"52px","letterSpacing":"-0.03em","fontWeight":"800"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.08em","fontWeight":"700"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.015em","fontWeight":"700"}],"technical-mono":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"500"}]}}}};</script></head><body class="bg-surface text-on-surface font-body-md text-body-md min-h-screen pb-24 selection:bg-primary-container selection:text-on-primary"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.25)] border-b amoled-border">
+<div class="h-16 w-full px-gutter-desktop flex items-center justify-between gap-space-md">
+
+<!-- Left Brand & Status -->
+<div class="flex items-center gap-space-lg">
+<a href="#" onclick="switchTab('dashboard'); return false;" class="flex items-center gap-space-xs group">
+<img alt="StrictQueue Logo" class="h-9 sm:h-10 w-auto object-contain rounded transition-transform group-hover:scale-105" src="logo.jpg">
+</a>
+<div class="hidden xl:flex items-center gap-space-xs px-space-sm py-space-xs rounded-full bg-surface-container-low amoled-border">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(0,255,102,0.7)] animate-pulse"></span>
+<span class="font-technical-mono text-technical-mono text-primary tracking-wide uppercase">100% Manual Queue (Zero Autoplay / Zero Recs)</span>
+</div>
+</div>
+
+<!-- Center Navigation Tabs -->
+<nav class="flex items-center gap-space-xs" id="nav-tabs">
+<button class="px-space-md py-space-xs rounded-lg transition-all font-label-md text-label-md cursor-pointer flex items-center gap-1.5" data-tab="dashboard" onclick="switchTab('dashboard')">
+<span>Dashboard</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg transition-all font-label-md text-label-md cursor-pointer" data-tab="queue" onclick="switchTab('queue')">
+<span>Queue</span>
+<span id="nav-queue-count" class="px-space-xs py-0.5 rounded-full bg-primary/10 text-primary font-technical-mono text-technical-mono text-xs">0 tracks</span>
+</button>
+<button class="px-space-md py-space-xs rounded-lg transition-all font-label-md text-label-md cursor-pointer flex items-center gap-1.5" data-tab="now-playing" onclick="switchTab('now-playing')">
+<span>Now Playing</span>
+</button>
+<button class="px-space-md py-space-xs rounded-lg transition-all font-label-md text-label-md cursor-pointer flex items-center gap-1.5" data-tab="settings" onclick="switchTab('settings')">
+<span>Settings</span>
+</button>
+</nav>
+
+<!-- Right Controls & Popovers -->
+<div class="flex items-center gap-space-sm relative">
+
+<!-- Quick Guide Overview Pop-Up Modal Trigger -->
+<button id="guide-modal-btn" onclick="openOverviewModal()" class="p-space-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all flex items-center justify-center cursor-pointer" title="Quick Guide & How It Works (?)" type="button">
+<span class="material-symbols-outlined text-base">help</span>
+</button>
+
+<!-- AI Track Advisor Top Bar Trigger -->
+<button id="ai-advisor-top-btn" onclick="toggleAiAdvisorDrawer()" class="p-space-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all flex items-center justify-center cursor-pointer relative" title="AI Track Advisor (Suggestions Only)" type="button">
+<span class="material-symbols-outlined text-base">auto_awesome</span>
+<span class="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+</button>
+
+<!-- Synced Lyrics & Drops Drawer Trigger -->
+<button id="lyrics-drawer-top-btn" onclick="toggleLyricsDrawer()" class="p-space-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all flex items-center justify-center cursor-pointer relative" title="Live Synced Lyrics & Timestamp Drops" type="button">
+<span class="material-symbols-outlined text-base">lyrics</span>
+</button>
+
+<!-- Theme Toggle Button -->
+<button id="theme-toggle-btn" onclick="toggleTheme()" class="p-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all flex items-center justify-center cursor-pointer" title="Toggle Dark/Light Theme" type="button">
+<span id="theme-icon" class="material-symbols-outlined text-base">light_mode</span>
+</button>
+
+<!-- Sliders Icon (Audio / Playback Controls Popover) -->
+<div class="relative">
+<button id="audio-settings-btn" onclick="toggleAudioPopover(event)" class="p-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all flex items-center justify-center cursor-pointer" title="Audio & Playback Controls" type="button">
+<span class="material-symbols-outlined text-base">tune</span>
+</button>
+
+<!-- Audio & Playback Controls Popover Card -->
+<div id="audio-popover" class="hidden absolute right-0 top-12 w-80 bg-surface-container rounded-xl p-space-md shadow-2xl z-50 flex-col gap-space-md amoled-border animate-fadeIn">
+<div class="flex items-center justify-between pb-space-xs border-b amoled-border">
+<div class="flex items-center gap-space-xs text-on-surface font-label-md">
+<span class="material-symbols-outlined text-sm text-primary">equalizer</span>
+<span>Audio &amp; Engine Controls</span>
+</div>
+<span class="px-1.5 py-0.2 rounded bg-primary/10 text-primary font-technical-mono text-[10px]">Direct DAC</span>
+</div>
+
+<!-- Volume Slider & Mute Toggle -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between text-xs">
+<span class="text-on-surface font-label-md">Output Volume</span>
+<span id="popover-vol-text" class="text-primary font-technical-mono">100%</span>
+</div>
+<div class="flex items-center gap-2">
+<button onclick="toggleMute()" class="text-on-surface-variant hover:text-primary transition-colors flex items-center cursor-pointer">
+<span id="popover-vol-icon" class="material-symbols-outlined text-base">volume_up</span>
+</button>
+<div id="popover-vol-slider" class="relative flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden cursor-pointer">
+<div id="popover-vol-bar" class="h-full bg-primary rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+</div>
+
+<!-- Playback Speed Selector -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between text-xs">
+<span class="text-on-surface font-label-md">Playback Speed</span>
+<span class="text-on-surface-variant font-technical-mono">Direct Pitch Sync</span>
+</div>
+<div class="grid grid-cols-5 gap-1 pt-1" id="speed-selector-btns">
+<button onclick="setPlaybackSpeed(0.75)" class="py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-technical-mono text-xs transition-colors cursor-pointer" data-speed="0.75">0.75x</button>
+<button onclick="setPlaybackSpeed(1)" class="py-1 rounded bg-primary text-on-primary font-technical-mono text-xs transition-colors cursor-pointer" data-speed="1">1.0x</button>
+<button onclick="setPlaybackSpeed(1.25)" class="py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-technical-mono text-xs transition-colors cursor-pointer" data-speed="1.25">1.25x</button>
+<button onclick="setPlaybackSpeed(1.5)" class="py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-technical-mono text-xs transition-colors cursor-pointer" data-speed="1.5">1.5x</button>
+<button onclick="setPlaybackSpeed(2)" class="py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-technical-mono text-xs transition-colors cursor-pointer" data-speed="2">2.0x</button>
+</div>
+</div>
+
+<!-- Auto-Skip Restricted Videos Toggle -->
+<div class="flex items-center justify-between pt-1 border-t amoled-border">
+<div class="flex flex-col">
+<span class="font-label-md text-xs text-on-surface">Auto-Skip Restricted (101/150)</span>
+<span class="font-body-sm text-[10px] text-on-surface-variant">Bypass blocked video owners</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input id="popover-auto-skip-toggle" onchange="toggleAutoSkipRestricted(this.checked)" checked type="checkbox" class="sr-only peer">
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+
+</div>
+</div>
+
+<!-- Profile Avatar Icon & Popover -->
+<div class="relative">
+<button id="profile-btn" onclick="toggleProfilePopover(event)" class="relative flex items-center justify-center pl-space-xs cursor-pointer" title="User Profile & Session Stats" type="button">
+<div class="p-0.5 rounded-full bg-primary/30">
+<img id="header-avatar-img" alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP1-nCCblPb90flXxf5P-3CiYJh5fPIPaDphBMIejSgiRgiIC5BTfmm25l-w5JgOa_A2S_IKMJGUqdqZKZ9PVc8pUotPxW5jPxAk_j1ylDlWSdh4bgUhuR51SmKmgxoDjjAtfjwUZdkiCHdy4X1GEz72kuUQ5bE1PP5ksgqqvcudgYwFGCeEvujccRs4QyAew9F0nfZ1aBN5B62AOUCBs7PZL5e2C3Wh1eGoQ-">
+</div>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-primary ring-2 ring-surface-container-lowest"></span>
+</button>
+
+<!-- Profile Dropdown Popover Card -->
+<div id="profile-popover" class="hidden absolute right-0 top-12 w-80 bg-surface-container rounded-xl p-space-md shadow-2xl z-50 flex-col gap-space-md amoled-border animate-fadeIn">
+<!-- User Profile Header -->
+<div class="flex items-center gap-space-sm pb-space-xs border-b amoled-border">
+<img id="popover-avatar-img" class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP1-nCCblPb90flXxf5P-3CiYJh5fPIPaDphBMIejSgiRgiIC5BTfmm25l-w5JgOa_A2S_IKMJGUqdqZKZ9PVc8pUotPxW5jPxAk_j1ylDlWSdh4bgUhuR51SmKmgxoDjjAtfjwUZdkiCHdy4X1GEz72kuUQ5bE1PP5ksgqqvcudgYwFGCeEvujccRs4QyAew9F0nfZ1aBN5B62AOUCBs7PZL5e2C3Wh1eGoQ-">
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span id="profile-display-name" class="font-headline-sm text-sm text-on-surface truncate">Sankalp</span>
+<button onclick="promptEditProfileName()" class="text-outline hover:text-primary transition-colors p-0.5" title="Edit Name">
+<span class="material-symbols-outlined text-xs">edit</span>
+</button>
+</div>
+<span class="font-technical-mono text-[10px] text-primary">Strict Session • Zero Profiling</span>
+</div>
+</div>
+
+<!-- Session Stats Grid -->
+<div class="grid grid-cols-2 gap-space-xs text-center">
+<div class="p-space-xs rounded-lg bg-surface-container-low">
+<span class="font-technical-mono text-[10px] text-on-surface-variant block">Tracks In Queue</span>
+<span id="popover-stat-queue" class="font-headline-sm text-sm text-primary font-bold">0</span>
+</div>
+<div class="p-space-xs rounded-lg bg-surface-container-low">
+<span class="font-technical-mono text-[10px] text-on-surface-variant block">Session Played</span>
+<span id="popover-stat-played" class="font-headline-sm text-sm text-secondary font-bold">0</span>
+</div>
+</div>
+
+<!-- Quick Actions -->
+<div class="flex flex-col gap-1.5 pt-1 border-t amoled-border">
+<button onclick="exportQueueJSON()" class="w-full py-1.5 px-space-sm rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-xs transition-colors flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-primary">file_download</span>
+<span>Export Queue Backup (.json)</span>
+</div>
+<span class="material-symbols-outlined text-xs text-outline">chevron_right</span>
+</button>
+
+<label class="w-full py-1.5 px-space-sm rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-xs transition-colors flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-secondary">file_upload</span>
+<span>Import Queue (.json)</span>
+</div>
+<input type="file" accept=".json" onchange="importQueueJSON(event)" class="hidden">
+<span class="material-symbols-outlined text-xs text-outline">chevron_right</span>
+</label>
+
+<button onclick="switchTab('settings'); closeAllPopovers();" class="w-full py-1.5 px-space-sm rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-xs transition-colors flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-tertiary">settings</span>
+<span>Engine &amp; Compliance Settings</span>
+</div>
+<span class="material-symbols-outlined text-xs text-outline">chevron_right</span>
+</button>
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+</header><main class="w-full pt-16 bg-surface"><div class="flex flex-col w-full">
+
+<!-- VIEW 1: DASHBOARD (Active default) -->
+<section id="view-dashboard" class="view-panel w-full">
+<!-- Subtle Ambient Top Halo -->
+<div class="relative w-full overflow-hidden">
+<div class="absolute -top-32 left-1/4 w-[540px] h-64 bg-primary-container/10 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="absolute -top-24 right-1/4 w-96 h-56 bg-tertiary-container/10 rounded-full blur-[90px] pointer-events-none"></div>
+<!-- Main 2-Column Console Layout -->
+<div class="w-full max-w-[1720px] mx-auto px-margin md:px-margin-desktop py-space-sm">
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-md items-start">
+<!-- LEFT COLUMN: MAIN STAGE (7/12 Desktop) -->
+<section class="xl:col-span-7 flex flex-col gap-space-md min-w-0">
+<!-- Hero Command Header (Compact & Streamlined) -->
+<div class="relative rounded-xl p-space-md bg-surface-container-low shadow-lg overflow-hidden amoled-border">
+<div class="absolute -right-12 -top-12 w-48 h-48 rounded-full bg-primary/5 blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center gap-1.5 px-space-xs py-0.5 rounded-full bg-primary/10 text-primary font-technical-mono text-technical-mono tracking-widest uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+Audiophile Engine • Zero Recs
+</span>
+<span class="hidden sm:inline-flex items-center px-space-xs py-0.5 rounded-full bg-tertiary/10 text-tertiary font-technical-mono text-technical-mono uppercase">
+Strict Queue Isolation
+</span>
+</div>
+<h1 class="font-headline-lg text-headline-md md:text-headline-lg text-on-surface tracking-tight mt-1">
+Your music. <span class="text-primary">Your rules.</span>
+</h1>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant self-start sm:self-center">
+<span class="material-symbols-outlined text-sm text-tertiary">verified_user</span>
+<span class="font-technical-mono text-technical-mono uppercase tracking-wider">Bit-Perfect Ingest</span>
+</div>
+</div>
+<!-- Compact Dual-Mode Unified Ingestion Bar -->
+<div class="mt-space-sm flex flex-col gap-space-xs relative">
+<div class="flex items-center justify-between gap-space-sm">
+<div class="inline-flex p-0.5 rounded-lg bg-surface-container-lowest gap-1">
+<button class="flex items-center gap-space-xs px-space-sm py-1 rounded bg-primary-container text-on-primary font-label-md text-label-md transition-all shadow-sm cursor-pointer" id="tab-url-btn" onclick="switchIngestMode('url')" type="button">
+<span class="material-symbols-outlined text-sm">link</span>
+<span>Paste Direct URL / ID</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all font-label-md text-label-md cursor-pointer" id="tab-search-btn" onclick="switchIngestMode('search')" type="button">
+<span class="material-symbols-outlined text-sm">search</span>
+<span>Search YouTube</span>
+</button>
+</div>
+<div id="search-spinner" class="hidden items-center gap-1.5 text-xs text-primary font-technical-mono">
+<span class="w-3.5 h-3.5 border-2 border-primary border-t-transparent rounded-full animate-spin"></span>
+<span>Searching YouTube...</span>
+</div>
+</div>
+
+<!-- Unified Command Input Panel -->
+<div class="flex flex-col sm:flex-row items-stretch gap-space-xs" id="panel-url">
+<div class="relative flex-1 flex items-center">
+<span id="input-mode-icon" class="material-symbols-outlined absolute left-space-md top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-base">link</span>
+<input id="url-input" class="w-full h-10 pl-10 pr-11 rounded-lg bg-surface-container text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none focus:ring-1 focus:ring-primary focus:bg-surface-container-high transition-all amoled-border" placeholder="Paste YouTube link / ID or type any song name to search..." type="text" autocomplete="off">
+<!-- Voice Search Mic Button -->
+<button id="voice-search-btn" onclick="toggleVoiceAssistant()" class="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container-highest transition-all flex items-center justify-center cursor-pointer" title="Speak to Search or Control Player (Click to start/stop)" type="button">
+<span id="voice-mic-icon" class="material-symbols-outlined text-base">mic</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0">
+<button id="add-to-queue-btn" class="h-10 px-space-md rounded-lg bg-primary hover:bg-secondary text-on-primary flex items-center justify-center gap-space-xs font-label-md text-label-md shadow-md neon-glow transition-all cursor-pointer font-bold" type="button" title="Add song to the end of queue">
+<span class="material-symbols-outlined text-sm">playlist_add</span>
+<span>+ Add to Queue</span>
+</button>
+<button id="play-next-btn" class="h-10 px-space-md rounded-lg bg-surface-container-high hover:bg-surface-bright text-primary amoled-border flex items-center justify-center gap-space-xs font-label-md text-label-md shadow-sm transition-all cursor-pointer font-semibold" type="button" title="Insert song right after currently playing track">
+<span class="material-symbols-outlined text-sm">queue_play_next</span>
+<span>Play Next</span>
+</button>
+</div>
+</div>
+
+<!-- Live YouTube Search Results Dropdown Panel -->
+<div id="search-results-dropdown" class="hidden absolute top-full left-0 right-0 mt-2 z-40 rounded-xl bg-surface-container p-space-sm shadow-2xl amoled-border flex flex-col gap-space-xs max-h-[460px] overflow-y-auto">
+<div class="flex items-center justify-between px-space-xs pb-1 border-b amoled-border text-xs">
+<div class="flex items-center gap-1.5 text-on-surface font-semibold">
+<span class="material-symbols-outlined text-primary text-sm">youtube_activity</span>
+<span>YouTube Search Matches</span>
+<span id="search-query-badge" class="font-technical-mono text-tertiary"></span>
+</div>
+<button onclick="closeSearchDropdown()" class="text-on-surface-variant hover:text-on-surface p-1 cursor-pointer">
+<span class="material-symbols-outlined text-xs">close</span>
+</button>
+</div>
+<div id="search-dropdown-list" class="flex flex-col gap-1.5 pt-1"></div>
+</div>
+
+<!-- Global Toast Notification Container -->
+<div id="toast-banner" class="hidden items-center justify-between p-space-xs px-space-sm rounded-lg bg-surface-container-high text-on-surface shadow-sm transition-all animate-fadeIn">
+<div class="flex items-center gap-space-xs min-w-0">
+<span id="toast-icon" class="material-symbols-outlined text-secondary text-sm flex-shrink-0">info</span>
+<span id="toast-message" class="font-body-sm text-body-sm text-xs truncate">Ready</span>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface font-technical-mono text-technical-mono text-xs ml-2 cursor-pointer flex-shrink-0" onclick="hideToast()">DISMISS</button>
+</div>
+
+</div>
+</div>
+
+<!-- Active Embedded YouTube Player Card -->
+<div class="relative rounded-xl bg-surface-container-low p-space-sm shadow-xl overflow-hidden flex flex-col gap-space-xs amoled-border">
+<!-- Video Container 16:9 Aspect Ratio with HUD Overlay -->
+<div class="relative aspect-video w-full rounded-lg bg-surface-container-lowest overflow-hidden shadow-2xl group outline-none" id="video-theater-container" tabindex="-1">
+
+<!-- Fullscreen & Keyboard HUD Volume Indicator Pill -->
+<div id="volume-hud-pill" class="hidden absolute top-space-md right-space-md z-30 pointer-events-none items-center gap-2 px-3 py-1.5 rounded-full bg-black/85 backdrop-blur-md amoled-border shadow-2xl transition-all duration-300 transform scale-95 opacity-0">
+<span id="volume-hud-icon" class="material-symbols-outlined text-primary text-base">volume_up</span>
+<div class="w-16 h-1.5 bg-white/20 rounded-full overflow-hidden">
+<div id="volume-hud-bar" class="h-full bg-primary rounded-full transition-all duration-150" style="width: 100%;"></div>
+</div>
+<span id="volume-hud-text" class="font-technical-mono text-xs text-white font-bold w-7 text-right">100%</span>
+</div>
+
+<!-- YouTube IFrame Target Element -->
+<div id="yt-player-target" class="w-full h-full absolute inset-0"></div>
+
+<!-- Video Poster Artwork (When idle or queue empty) -->
+<div id="video-poster" class="w-full h-full bg-cover bg-center pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAj8Iulkroj4rqk8ee9-cMqal472DU0Jyq6N9owSjSXrSpSCM7imLvryJywtwWGLazABxujfelscXoJ-3y_eT7nIXvTZH6KYQhqgsbcPxj8g4pY50AoSLrKMjxgz0Pcr6bRYzisBQ2p6yxPZzG_0yMpwaM4rXgv2dW7dW56OYnABTw0Kg7k_aL5_p7MfJ-N0yOVMZnC2nY-ASzDYpMd7u7H-WZejenmKDemH2CR')"></div>
+
+<!-- Dark Cinematic Vignette Gradient -->
+<div id="video-vignette" class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/30 to-surface-container-lowest/60 pointer-events-none"></div>
+
+<!-- Top HUD Strip (Reveals cleanly on hover without freezing iframe) -->
+<div class="absolute top-0 left-0 right-0 p-space-sm flex items-center justify-between gap-space-md bg-gradient-to-b from-black/80 to-transparent z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-6 h-6 rounded-full bg-error flex items-center justify-center shadow-lg flex-shrink-0">
+<span class="material-symbols-outlined text-white text-xs">play_arrow</span>
+</div>
+<div class="flex flex-col truncate">
+<span id="player-title" class="font-headline-sm text-label-md text-white truncate drop-shadow">QueueTune Audiophile Player</span>
+<span id="player-channel" class="font-technical-mono text-technical-mono text-on-surface-variant flex items-center gap-1 truncate">
+<span>YouTube Strict Engine</span>
+<span>•</span>
+<span class="text-tertiary">Zero Autoplay Isolation</span>
+</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0">
+<span id="player-status-badge" class="px-1.5 py-0.5 rounded bg-black/60 text-tertiary font-technical-mono text-technical-mono uppercase tracking-widest backdrop-blur-md">IDLE</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-container/80 text-on-primary font-technical-mono text-technical-mono">Bit-Perfect Pass</span>
+</div>
+</div>
+
+<!-- Center Video Equalizer Indicator (Completely Removed - Unobstructed Video) -->
+
+<!-- QUEUE COMPLETED / FINISHED FULL TERMINAL OVERLAY (State 9) -->
+<div id="queue-complete-overlay" class="hidden absolute inset-0 z-30 bg-surface-container-lowest/95 backdrop-blur-xl p-space-md sm:p-space-lg flex-col justify-between overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-r from-tertiary/10 via-transparent to-primary/10 pointer-events-none"></div>
+
+<div class="relative z-10 flex items-center justify-between border-b border-outline-variant/30 pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="px-space-sm py-0.5 rounded-full bg-tertiary/15 text-tertiary font-technical-mono text-technical-mono text-[10px] uppercase tracking-wider">
+QUEUE_TERMINATED • ZERO AUTOPLAY HARD STOP
+</span>
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+</div>
+<span class="font-technical-mono text-technical-mono text-outline text-[11px]">Pure Silence Soundstage</span>
+</div>
+
+<div class="relative z-10 flex flex-col items-center justify-center text-center my-auto px-space-md py-space-sm">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-tertiary mb-2 shadow-inner">
+<span class="material-symbols-outlined text-2xl">volume_off</span>
+</div>
+<h3 class="font-headline-md text-headline-sm sm:text-headline-md text-on-surface tracking-tight">Queue Finished — Playback Halted</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-md mt-1">
+All queued tracks have completed. YouTube autoplay has been strictly prevented. Audio output terminated to pure silence.
+</p>
+
+<!-- Session Telemetry Summary -->
+<div class="grid grid-cols-3 gap-space-xs sm:gap-space-sm w-full max-w-sm mt-3 pt-2 border-t border-outline-variant/20">
+<div class="p-space-xs rounded bg-surface-container-low text-center">
+<span class="font-technical-mono text-[10px] text-outline block">Total Played</span>
+<span id="complete-tracks-count" class="font-headline-sm text-xs text-on-surface font-bold">0 tracks</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container-low text-center">
+<span class="font-technical-mono text-[10px] text-outline block">Hardware Node</span>
+<span class="font-headline-sm text-xs text-primary font-bold">0.00 dB</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container-low text-center">
+<span class="font-technical-mono text-[10px] text-outline block">Algorithmic Drift</span>
+<span class="font-headline-sm text-xs text-tertiary font-bold">0% (Manual)</span>
+</div>
+</div>
+</div>
+
+<div class="relative z-10 flex items-center justify-center gap-space-xs pt-space-xs border-t border-outline-variant/30">
+<button onclick="replayQueue()" class="px-space-md py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-md text-label-md transition-all flex items-center gap-space-xs cursor-pointer shadow-sm">
+<span class="material-symbols-outlined text-sm">replay</span>
+<span>Replay Queue</span>
+</button>
+<button onclick="focusIngestInput()" class="px-space-md py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md shadow-md hover:bg-primary-fixed-dim transition-all flex items-center gap-space-xs cursor-pointer">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+<span>+ Add More Songs</span>
+</button>
+</div>
+</div>
+
+<!-- RESTRICTED VIDEO FALLBACK OVERLAY (State 5: Code 150/101) -->
+<div id="restricted-video-overlay" class="hidden absolute inset-0 z-30 bg-surface-container-lowest/95 backdrop-blur-xl p-space-md flex-col justify-between">
+<div class="flex items-center justify-between border-b border-error/30 pb-space-xs">
+<span class="px-space-sm py-0.5 rounded-full bg-error-container/30 text-error font-technical-mono text-technical-mono text-[10px]">
+STATE 5: EMBED_PERMISSION_DENIED (Code 150/101)
+</span>
+<span class="font-technical-mono text-technical-mono text-outline text-[11px]">Auto-Skipping Track</span>
+</div>
+<div class="flex flex-col items-center justify-center text-center my-auto">
+<div class="w-12 h-12 rounded-full bg-error-container/20 flex items-center justify-center text-error mb-2">
+<span class="material-symbols-outlined text-2xl">gpp_maybe</span>
+</div>
+<h4 class="font-headline-sm text-on-surface">Playback Restricted by Content Owner</h4>
+<p class="font-body-sm text-on-surface-variant max-w-sm mt-1 text-xs">
+The rights holder has disabled external YouTube IFrame playback for this video. Automatically skipping to the next song in your queue.
+</p>
+</div>
+<div class="flex items-center justify-center gap-space-xs">
+<button onclick="playNext()" class="px-space-md py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md shadow transition-all flex items-center gap-1 cursor-pointer">
+<span class="material-symbols-outlined text-sm">skip_next</span>
+<span>Skip Now</span>
+</button>
+<a id="restricted-external-link" href="#" target="_blank" rel="noopener noreferrer" class="px-space-md py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-md text-label-md transition-all flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+<span>Open on YouTube</span>
+</a>
+</div>
+</div>
+
+<!-- Bottom Embedded Player Control Bar (Reveals cleanly on hover) -->
+<div class="absolute bottom-0 left-0 right-0 p-space-sm bg-gradient-to-t from-black/95 via-black/80 to-transparent flex flex-col gap-1 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+<!-- Scrub Bar -->
+<div id="card-scrub-bar" class="relative w-full h-1 bg-white/20 rounded-full cursor-pointer group/scrub">
+<div id="card-scrub-progress" class="h-full bg-primary rounded-full relative" style="width: 0%;">
+<span class="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)] scale-100 group-hover/scrub:scale-125 transition-transform"></span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center gap-space-sm">
+<button id="card-play-pause-btn" class="text-white hover:text-primary transition-colors flex items-center cursor-pointer" type="button" title="Play / Pause">
+<span class="material-symbols-outlined text-base">play_arrow</span>
+</button>
+<button onclick="playNext()" class="text-on-surface-variant hover:text-white transition-colors flex items-center cursor-pointer" type="button" title="Next Track">
+<span class="material-symbols-outlined text-sm">skip_next</span>
+</button>
+<div class="flex items-center gap-2">
+<button onclick="toggleMute()" class="text-on-surface-variant hover:text-white transition-colors flex items-center cursor-pointer p-0.5" type="button" title="Toggle Mute (M)">
+<span id="card-volume-icon" class="material-symbols-outlined text-sm">volume_up</span>
+</button>
+<div id="card-volume-slider" class="w-16 sm:w-20 h-1.5 bg-white/20 rounded-full overflow-hidden cursor-pointer flex items-center" title="Volume Slider (+ / - or Shift + Up/Down)">
+<div id="card-volume-bar" class="h-full bg-primary w-full rounded-full transition-all duration-100"></div>
+</div>
+</div>
+<span id="card-time-display" class="font-technical-mono text-technical-mono text-on-surface-variant ml-1">00:00 / 00:00</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<button id="loop-toggle-btn" onclick="toggleLoop()" class="px-1.5 py-0.5 rounded bg-white/10 hover:bg-white/20 text-on-surface-variant transition-colors font-technical-mono text-technical-mono flex items-center gap-1 cursor-pointer" type="button" title="Toggle Loop Queue">
+<span class="material-symbols-outlined text-xs">repeat</span>
+<span id="loop-mode-label">Off</span>
+</button>
+<button id="card-lyrics-btn" onclick="toggleLyricsDrawer()" class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer" type="button" title="Live Synced Lyrics & Drops">
+<span class="material-symbols-outlined text-sm">lyrics</span>
+</button>
+<button id="card-pip-btn" onclick="toggleMiniPlayer()" class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer" type="button" title="Mini-Player / Picture-in-Picture">
+<span class="material-symbols-outlined text-sm">picture_in_picture_alt</span>
+</button>
+<button onclick="toggleFullscreen()" class="text-on-surface-variant hover:text-white transition-colors cursor-pointer" type="button" title="Fullscreen">
+<span class="material-symbols-outlined text-sm">fullscreen</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Strict Rule Banner -->
+<div class="flex items-center justify-between gap-space-sm px-space-sm py-1.5 rounded-lg bg-surface-container">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(123,216,175,0.8)]"></span>
+<span class="font-label-md text-label-md text-on-surface">Strict Zero-Recs: Autoplay Permanently Blocked</span>
+</div>
+<span class="font-technical-mono text-technical-mono text-on-surface-variant text-xs">Hard Stop On Queue Depletion</span>
+</div>
+</div>
+<!-- YouTube Search Ingestion Stream Results -->
+<div class="flex flex-col gap-space-xs" id="search-results-section">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<h2 class="font-headline-sm text-label-md text-on-surface font-semibold">YouTube Ingest Stream</h2>
+<span id="search-status-tag" class="px-space-xs py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-technical-mono text-technical-mono text-xs">Curated Ingest</span>
+</div>
+<span class="font-technical-mono text-technical-mono text-outline text-xs">Click + to append to manual queue</span>
+</div>
+
+<!-- Dynamic Search / Curated Results List -->
+<div class="flex flex-col gap-1.5" id="search-results-container"></div>
+</div>
+</section>
+<!-- RIGHT COLUMN: PROMINENT STICKY QUEUE SIDEBAR (5/12 Desktop) -->
+<aside class="xl:col-span-5 flex flex-col gap-space-sm sticky top-20">
+<!-- Queue Panel Container -->
+<div class="rounded-xl bg-surface-container-low p-space-md shadow-2xl flex flex-col gap-space-sm amoled-border">
+<!-- Panel Header -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-xl">queue_music</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Manual Queue</h2>
+<button onclick="shareQueueUrl()" class="p-1 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all cursor-pointer flex items-center gap-1 text-xs font-technical-mono" title="Share Queue as Link (#q=...)">
+<span class="material-symbols-outlined text-sm">share</span>
+<span class="hidden sm:inline">Share</span>
+</button>
+</div>
+<!-- Total Counter Badge -->
+<div id="sidebar-queue-badge" class="px-space-sm py-0.5 rounded-full bg-surface-container-highest text-primary font-technical-mono text-technical-mono font-bold tracking-wide text-xs">
+0 songs • 00:00
+</div>
+</div>
+<!-- Hard Stop Toggle Switch -->
+<div class="flex items-center justify-between p-space-xs px-space-sm rounded-lg bg-surface-container">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface text-xs font-semibold">Stop on Queue End</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">Player remains silent when finished</span>
+</div>
+<!-- Toggle Switch Indicator -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox">
+<div class="w-10 h-5 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</div>
+<!-- Queue Quick Actions Strip -->
+<div class="grid grid-cols-3 gap-space-xs pt-0.5">
+<button class="px-space-xs py-1.5 rounded-lg bg-surface-container hover:bg-error-container hover:text-on-error-container text-error transition-all flex items-center justify-center gap-1 font-label-md text-label-md text-xs cursor-pointer" onclick="toggleClearModal(true)" type="button">
+<span class="material-symbols-outlined text-xs">delete_sweep</span>
+<span>Clear</span>
+</button>
+<button class="px-space-xs py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-all flex items-center justify-center gap-1 font-label-md text-label-md text-xs cursor-pointer" onclick="shuffleQueue()" type="button" title="Shuffle remaining queue">
+<span class="material-symbols-outlined text-xs">shuffle</span>
+<span>Shuffle</span>
+</button>
+<button id="sidebar-loop-btn" class="px-space-xs py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-all flex items-center justify-center gap-1 font-label-md text-label-md text-xs cursor-pointer" onclick="toggleLoop()" type="button" title="Toggle Loop Queue">
+<span class="material-symbols-outlined text-xs">repeat</span>
+<span id="sidebar-loop-label">Loop</span>
+</button>
+</div>
+</div>
+<!-- Clear Confirmation Banner -->
+<div class="hidden p-space-sm rounded-lg bg-surface-container-highest shadow-xl flex-col gap-space-xs animate-fadeIn" id="clear-confirm-banner">
+<div class="flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-error text-base">warning</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface text-xs">Purge Entire Queue?</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">All 5 tracks will be removed from manual sequence.</p>
+</div>
+</div>
+<div class="flex items-center justify-end gap-space-xs pt-0.5">
+<button class="px-space-sm py-1 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md text-xs" onclick="toggleClearModal(false)" type="button">Cancel</button>
+<button class="px-space-sm py-1 rounded-lg bg-error text-on-error font-label-md text-label-md text-xs" onclick="confirmClearQueue()" type="button">Yes, Clear</button>
+</div>
+</div>
+<!-- Drag & Drop Pipeline Header -->
+<div class="flex items-center justify-between text-outline font-technical-mono text-technical-mono text-[10px] px-1 tracking-wider">
+<span>ACTIVE PLAYBACK PIPELINE</span>
+<span>DRAG HANDLES TO REORDER</span>
+</div>
+<!-- Active Queue Track Cards List (Clean compact view) -->
+<div class="flex flex-col gap-1.5 max-h-[340px] overflow-y-auto pr-0.5" id="queue-items-container"></div>
+<!-- Empty Queue Slate -->
+<div class="hidden flex-col items-center justify-center p-space-md text-center rounded-lg bg-surface-container-lowest" id="empty-queue-slate">
+<span class="material-symbols-outlined text-outline text-2xl mb-1">music_off</span>
+<span class="font-headline-sm text-label-md text-on-surface">Queue is empty</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-xs mt-0.5">Search YouTube or paste a URL above to load songs.</p>
+</div>
+<!-- Telemetry Footer -->
+<div class="p-space-xs px-space-sm rounded-lg bg-surface-container-lowest flex items-center justify-between text-outline font-technical-mono text-technical-mono text-xs">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-tertiary">check_circle</span>
+<span>Buffer Health: 100%</span>
+</div>
+<span>Bit-Perfect Stream</span>
+</div>
+</div>
+<!-- Audiophile Mastering Card (Compact) -->
+<div class="p-space-sm rounded-xl bg-surface-container-low shadow-lg flex flex-col gap-1 border border-outline-variant/20">
+<div class="flex items-center justify-between text-xs">
+<span class="font-label-md text-label-md text-on-surface text-xs font-semibold">Hardware Mastering Stream</span>
+<span class="px-1.5 py-0.2 rounded bg-tertiary/10 text-tertiary font-technical-mono text-technical-mono text-[10px]">Lossless DAC Out</span>
+</div>
+<div class="w-full h-8 bg-surface-container-lowest rounded p-1 flex items-end justify-between gap-1 overflow-hidden">
+<svg class="w-full h-full text-primary" fill="currentColor" preserveAspectRatio="none" viewBox="0 0 280 40">
+<rect height="16" opacity="0.6" rx="1" width="4" x="0" y="24"></rect>
+<rect height="22" opacity="0.7" rx="1" width="4" x="7" y="18"></rect>
+<rect height="30" opacity="0.8" rx="1" width="4" x="14" y="10"></rect>
+<rect height="34" rx="1" width="4" x="21" y="6"></rect>
+<rect height="26" opacity="0.85" rx="1" width="4" x="28" y="14"></rect>
+<rect height="18" opacity="0.6" rx="1" width="4" x="35" y="22"></rect>
+<rect height="28" opacity="0.9" rx="1" width="4" x="42" y="12"></rect>
+<rect height="36" rx="1" width="4" x="49" y="4"></rect>
+<rect height="32" rx="1" width="4" x="56" y="8"></rect>
+<rect height="24" opacity="0.75" rx="1" width="4" x="63" y="16"></rect>
+<rect height="14" opacity="0.5" rx="1" width="4" x="70" y="26"></rect>
+<rect height="20" opacity="0.7" rx="1" width="4" x="77" y="20"></rect>
+<rect height="31" opacity="0.9" rx="1" width="4" x="84" y="9"></rect>
+<rect height="38" rx="1" width="4" x="91" y="2"></rect>
+<rect height="33" rx="1" width="4" x="98" y="7"></rect>
+<rect height="25" opacity="0.8" rx="1" width="4" x="105" y="15"></rect>
+<rect height="16" opacity="0.6" rx="1" width="4" x="112" y="24"></rect>
+<rect height="23" opacity="0.7" rx="1" width="4" x="119" y="17"></rect>
+<rect height="29" opacity="0.85" rx="1" width="4" x="126" y="11"></rect>
+<rect height="35" rx="1" width="4" x="133" y="5"></rect>
+<rect height="28" opacity="0.85" rx="1" width="4" x="140" y="12"></rect>
+<rect height="21" opacity="0.7" rx="1" width="4" x="147" y="19"></rect>
+<rect height="15" opacity="0.5" rx="1" width="4" x="154" y="25"></rect>
+<rect height="22" opacity="0.75" rx="1" width="4" x="161" y="18"></rect>
+<rect height="32" rx="1" width="4" x="168" y="8"></rect>
+<rect height="26" opacity="0.85" rx="1" width="4" x="175" y="14"></rect>
+<rect height="18" opacity="0.6" rx="1" width="4" x="182" y="22"></rect>
+<rect height="30" opacity="0.9" rx="1" width="4" x="189" y="10"></rect>
+<rect height="24" opacity="0.75" rx="1" width="4" x="196" y="16"></rect>
+<rect height="13" opacity="0.45" rx="1" width="4" x="203" y="27"></rect>
+<rect height="20" opacity="0.7" rx="1" width="4" x="210" y="20"></rect>
+<rect height="28" opacity="0.85" rx="1" width="4" x="217" y="12"></rect>
+<rect height="34" rx="1" width="4" x="224" y="6"></rect>
+<rect height="25" opacity="0.8" rx="1" width="4" x="231" y="15"></rect>
+<rect height="18" opacity="0.6" rx="1" width="4" x="238" y="22"></rect>
+<rect height="29" opacity="0.85" rx="1" width="4" x="245" y="11"></rect>
+<rect height="22" opacity="0.7" rx="1" width="4" x="252" y="18"></rect>
+<rect height="14" opacity="0.5" rx="1" width="4" x="259" y="26"></rect>
+<rect height="20" opacity="0.7" rx="1" width="4" x="266" y="20"></rect>
+<rect height="12" opacity="0.4" rx="1" width="4" x="273" y="28"></rect>
+</svg>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-technical-mono text-technical-mono text-[10px]">
+<span>STEREO (L/R)</span>
+<span>48.0 kHz • 24-bit Virtual Pass</span>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</div>
+
+</section>
+
+<!-- VIEW 2: EXPANDED FULL-WIDTH QUEUE MANAGER -->
+<section id="view-queue" class="view-panel w-full hidden">
+<div class="flex flex-col w-full">
+<!-- Subtle Ambient Glow -->
+<div class="relative w-full overflow-hidden px-gutter-desktop py-space-lg flex flex-col gap-space-lg">
+<div class="absolute -top-32 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="absolute top-1/2 right-10 w-80 h-80 bg-tertiary/5 rounded-full blur-[100px] pointer-events-none"></div>
+<!-- Duplicate Warning Notification Banner -->
+<div class="w-full bg-surface-container-high/90 backdrop-blur-xl rounded-xl p-space-md shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md transition-all duration-300" id="duplicate-banner">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-8 h-8 rounded-lg bg-secondary-container/40 flex items-center justify-center flex-shrink-0 text-primary">
+<span class="material-symbols-outlined text-base">info</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Duplicate detected in manual pool</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">
+<span class="text-primary font-technical-mono text-technical-mono">"Midnight City"</span> is already placed at position <strong class="text-on-surface">#2</strong>. Added anyway or keep single entry?
+          </span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0 self-end md:self-center">
+<button class="px-space-md py-space-xs rounded-lg bg-surface-container-highest hover:bg-surface-bright text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors" onclick="document.getElementById('duplicate-banner').remove()" type="button">
+          Keep Single
+        </button>
+<button class="px-space-md py-space-xs rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md transition-all shadow-[0_0_12px_rgba(140,128,255,0.3)]" onclick="document.getElementById('duplicate-banner').remove()" type="button">
+          Allow Duplicate
+        </button>
+<button class="p-space-xs text-on-surface-variant hover:text-on-surface ml-space-xs" onclick="document.getElementById('duplicate-banner').remove()" title="Dismiss notification" type="button">
+<span class="material-symbols-outlined text-base">close</span>
+</button>
+</div>
+</div>
+<!-- Header & Live Telemetry Bar -->
+<div class="flex flex-col xl:flex-row xl:items-end justify-between gap-space-lg">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="font-technical-mono text-technical-mono uppercase text-tertiary px-space-xs py-0.5 rounded bg-tertiary/10 tracking-widest">Audiophile Session Rack</span>
+<span class="font-technical-mono text-technical-mono text-outline">ST-4096-SEQ</span>
+</div>
+<div class="flex items-baseline gap-space-md">
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Queue Management</h1>
+<span class="font-technical-mono text-technical-mono text-primary px-space-sm py-0.5 rounded bg-primary/10">Engine: Active Manual</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+          Deterministic sequential playback console. Track progression terminates strictly at queue boundary with zero autoplay injection or algorithmic telemetry.
+        </p>
+</div>
+<!-- Quick Metrics Ribbon -->
+<div class="flex flex-wrap items-center gap-space-sm bg-surface-container-lowest/80 backdrop-blur-md p-space-xs rounded-xl shadow-lg">
+<div class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container-low">
+<span class="material-symbols-outlined text-primary text-base">queue_music</span>
+<div class="flex flex-col">
+<span class="font-technical-mono text-technical-mono text-outline">COUNT</span>
+<span class="font-headline-sm text-headline-sm text-on-surface" id="queue-count-pill">8 Tracks</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container-low">
+<span class="material-symbols-outlined text-secondary text-base">timelapse</span>
+<div class="flex flex-col">
+<span class="font-technical-mono text-technical-mono text-outline">EST. RUNTIME</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">34m 12s</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container-low">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary shadow-[0_0_8px_rgba(123,216,175,0.7)] animate-pulse"></span>
+<div class="flex flex-col">
+<span class="font-technical-mono text-technical-mono text-outline">PROTOCOL</span>
+<span class="font-headline-sm text-headline-sm text-tertiary">Zero-Rec Strictly Manual</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Master Control Toolbar & YouTube Quick Add -->
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-md bg-surface-container-low/70 backdrop-blur-md p-space-md rounded-xl shadow-md">
+<!-- Left Action Buttons -->
+<div class="flex flex-wrap items-center gap-space-xs">
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-all shadow-sm" id="shuffle-btn" type="button">
+<span class="material-symbols-outlined text-base text-primary">shuffle</span>
+<span class="font-label-md text-label-md">Shuffle Order</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-primary-container/20 text-primary shadow-[0_0_14px_rgba(140,128,255,0.25)] hover:bg-primary-container/30 transition-all" id="repeat-btn" type="button">
+<span class="material-symbols-outlined text-base text-primary">repeat_one</span>
+<span class="font-label-md text-label-md">Repeat Song</span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping ml-1"></span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-all shadow-sm" onclick="loadDefaultPlaylist()" title="Load curated 5-track default playlist" type="button">
+<span class="material-symbols-outlined text-base text-primary">playlist_add_check</span>
+<span class="font-label-md text-label-md">Load Defaults</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-error-container/20 hover:bg-error-container/40 text-error transition-all" onclick="openClearModal()" type="button">
+<span class="material-symbols-outlined text-base">delete_sweep</span>
+<span class="font-label-md text-label-md">Clear Entire Queue</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-all shadow-sm" onclick="shareQueueUrl()" title="Share entire active queue as link" type="button">
+<span class="material-symbols-outlined text-base text-primary">share</span>
+<span class="font-label-md text-label-md">Share Queue</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-all" type="button">
+<span class="material-symbols-outlined text-base">manage_search</span>
+<span class="font-label-md text-label-md">Add via Search</span>
+</button>
+</div>
+<!-- Quick Add Ingestion Field -->
+<form class="flex items-center gap-space-xs bg-surface-container-lowest rounded-lg p-1 shadow-inner flex-1 max-w-xl" onsubmit="handleQuickAdd(event)">
+<div class="flex items-center pl-space-sm text-outline">
+<span class="material-symbols-outlined text-base">smart_display</span>
+</div>
+<input class="bg-transparent font-body-md text-body-md text-on-surface placeholder:text-outline w-full px-space-xs py-1.5 outline-none focus:ring-0" id="quick-url-input" placeholder="Paste YouTube link / ID (e.g. youtube.com/watch?v=...)" type="text"/>
+<button class="flex items-center gap-space-xs px-space-md py-1.5 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md transition-all shadow-[0_0_12px_rgba(140,128,255,0.3)] flex-shrink-0" type="submit">
+<span class="material-symbols-outlined text-sm">add</span>
+<span>Quick Add</span>
+</button>
+</form>
+</div>
+<!-- Active Now Playing Hero Rack Unit -->
+<div class="flex flex-col bg-surface-container-low rounded-xl overflow-hidden shadow-2xl relative">
+<div class="h-1 bg-gradient-to-r from-primary via-secondary to-tertiary"></div>
+<div class="p-space-lg flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-lg">
+<!-- Track Master Info -->
+<div class="flex items-center gap-space-lg min-w-0 flex-1">
+<!-- Thumbnail with Vinyl/Video Flare -->
+<div class="relative w-28 h-28 lg:w-32 lg:h-32 rounded-xl overflow-hidden shadow-2xl flex-shrink-0 group">
+<img id="qm-hero-thumb" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAj8Iulkroj4rqk8ee9-cMqal472DU0Jyq6N9owSjSXrSpSCM7imLvryJywtwWGLazABxujfelscXoJ-3y_eT7nIXvTZH6KYQhqgsbcPxj8g4pY50AoSLrKMjxgz0Pcr6bRYzisBQ2p6yxPZzG_0yMpwaM4rXgv2dW7dW56OYnABTw0Kg7k_aL5_p7MfJ-N0yOVMZnC2nY-ASzDYpMd7u7H-WZejenmKDemH2CR"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 via-transparent to-transparent"></div>
+<a class="absolute bottom-2 right-2 w-7 h-7 rounded-lg bg-surface-container-lowest/90 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors" href="https://youtube.com" rel="noopener noreferrer" target="_blank" title="Open YouTube Source">
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+<!-- Equalizer HUD Overlay -->
+<div class="absolute top-2 left-2 px-space-xs py-0.5 rounded bg-surface-container-lowest/85 backdrop-blur-sm flex items-center gap-1 shadow-sm">
+<span class="w-1 h-3 bg-tertiary rounded-full animate-bounce"></span>
+<span class="w-1 h-4 bg-tertiary rounded-full animate-pulse"></span>
+<span class="w-1 h-2 bg-tertiary rounded-full animate-bounce"></span>
+<span class="font-technical-mono text-technical-mono text-tertiary ml-1">MASTER LIVE</span>
+</div>
+</div>
+<!-- Metadata & Telemetry -->
+<div class="flex flex-col gap-space-xs min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="px-space-xs py-0.5 rounded bg-primary/10 text-primary font-technical-mono text-technical-mono uppercase">Position #1 Active</span>
+<span class="px-space-xs py-0.5 rounded bg-tertiary/10 text-tertiary font-technical-mono text-technical-mono">Lossless Stream Verified</span>
+<span class="px-space-xs py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-technical-mono text-technical-mono">1080p 60fps</span>
+</div>
+<h2 id="qm-hero-title" class="font-headline-lg text-headline-lg text-on-surface truncate">No Track Selected</h2>
+<div class="flex items-center gap-space-xs text-on-surface-variant">
+<span id="qm-hero-artist" class="font-body-lg text-body-lg text-secondary">Manual Queue Empty</span>
+<span class="text-outline">/</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Record Makers</span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span class="font-technical-mono text-technical-mono text-outline">ID: MV_Q3a8v</span>
+</div>
+<!-- Real-time Scrubber Telemetry -->
+<div class="flex flex-col gap-1.5 mt-space-xs max-w-xl">
+<div class="relative w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div id="qm-hero-scrub-bar" class="h-full bg-gradient-to-r from-primary to-primary-fixed rounded-full transition-all" style="width: 0%;"></div>
+</div>
+<div class="flex items-center justify-between font-technical-mono text-technical-mono text-outline">
+<span id="qm-hero-time-cur" class="text-primary font-technical-mono">00:00</span>
+<span class="text-tertiary">(-02:37 remaining)</span>
+<span id="qm-hero-time-total">00:00</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Hero Actions -->
+<div class="flex flex-wrap lg:flex-col items-center lg:items-end gap-space-xs flex-shrink-0 w-full lg:w-auto justify-end">
+<button onclick="if(ytPlayer&&ytPlayer.seekTo){ytPlayer.seekTo(0,true); ytPlayer.playVideo();}" class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-colors shadow-sm cursor-pointer" type="button"><span class="material-symbols-outlined text-sm text-secondary">playlist_play</span><span>Replay Track</span></button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-sm text-outline">vertical_align_bottom</span>
+<span>Send to End</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-error-container/20 hover:bg-error-container/40 text-error font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-sm">eject</span>
+<span>Eject Active</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Main Workspace Split: Track Queue (Left) & Diagnostics / Empty State Inspector (Right) -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg">
+<!-- Primary Upcoming Queue Section (8 cols) -->
+<div class="xl:col-span-8 flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-sm text-headline-sm text-on-surface">Upcoming Sequence</span>
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-technical-mono text-technical-mono">7 Remaining</span>
+</div>
+<span class="font-technical-mono text-technical-mono text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">drag_indicator</span> Drag rows to reorder
+          </span>
+</div>
+<!-- Reorderable Interactive Track List -->
+<div id="qm-full-queue-container" class="flex flex-col gap-space-xs">
+<!-- Dynamic full queue items rendered here -->
+</div>
+<div id="qm-empty-slate" class="hidden flex-col items-center justify-center p-space-xl text-center rounded-xl bg-surface-container-low amoled-border my-space-md">
+<span class="material-symbols-outlined text-outline text-4xl mb-2">music_off</span>
+<span class="font-headline-sm text-on-surface">Manual Queue is Empty</span>
+<p class="font-body-sm text-on-surface-variant max-w-sm mt-1">Paste any YouTube URL or search track above to add songs to the playback pipeline.</p>
+</div>
+<!-- Strict Termination Marker (End of Queue) -->
+<div class="relative w-full rounded-xl bg-surface-container-lowest p-space-lg shadow-xl overflow-hidden mt-space-sm">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-tertiary"></div>
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md pl-space-xs">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-tertiary/10 flex items-center justify-center flex-shrink-0 text-tertiary shadow-[0_0_16px_rgba(123,216,175,0.2)]">
+<span class="material-symbols-outlined text-xl">stop_circle</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">Queue Boundary Hard-Stop</span>
+<span class="font-technical-mono text-technical-mono px-space-xs py-0.5 rounded bg-tertiary/15 text-tertiary uppercase">Enforced</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xl">
+                  Playback automatically halts at the end of this manual queue. QueueTune strictly disables background radio, algorithmic recommendations, and infinite autoplay.
+                </p>
+</div>
+</div>
+<button class="px-space-md py-space-xs rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-colors flex items-center gap-1 flex-shrink-0" type="button">
+<span class="material-symbols-outlined text-base text-primary">add_circle</span>
+<span>Append More Tracks</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right Column: Queue Telemetry & UX Context Preview Box (4 cols) -->
+<div class="xl:col-span-4 flex flex-col gap-space-md">
+<!-- Mode Policy Card -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-lg flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">Playback Policy</span>
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+</div>
+<div class="flex flex-col gap-space-xs text-on-surface-variant">
+<div class="flex items-center justify-between py-1 bg-surface-container-lowest/50 px-space-xs rounded">
+<span class="font-technical-mono text-technical-mono text-outline">AUTOPLAY ENGINE</span>
+<span class="font-technical-mono text-technical-mono text-error font-bold">DISABLED</span>
+</div>
+<div class="flex items-center justify-between py-1 bg-surface-container-lowest/50 px-space-xs rounded">
+<span class="font-technical-mono text-technical-mono text-outline">RECOMMENDED NEXT</span>
+<span class="font-technical-mono text-technical-mono text-error font-bold">BLOCKED</span>
+</div>
+<div class="flex items-center justify-between py-1 bg-surface-container-lowest/50 px-space-xs rounded">
+<span class="font-technical-mono text-technical-mono text-outline">QUEUE RETENTION</span>
+<span class="font-technical-mono text-technical-mono text-tertiary">SESSION LOCKED</span>
+</div>
+<div class="flex items-center justify-between py-1 bg-surface-container-lowest/50 px-space-xs rounded">
+<span class="font-technical-mono text-technical-mono text-outline">TRANSITION MODE</span>
+<span class="font-technical-mono text-technical-mono text-primary">GAPLESS / 0s</span>
+</div>
+</div>
+</div>
+<!-- Collapsible Empty State Preview Showcase -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">Queue State Preview</span>
+<button class="text-primary font-technical-mono text-technical-mono hover:underline" onclick="toggleEmptyPreview()" type="button">
+              Toggle Demo View
+            </button>
+</div>
+<!-- Empty State Graphic Card (Demonstrating UX when queue has 0 items) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg flex flex-col items-center justify-center text-center gap-space-md shadow-inner" id="empty-state-card">
+<div class="w-20 h-20 rounded-full bg-surface-container flex items-center justify-center shadow-lg relative">
+<!-- Inline Audio Tape / Vinyl Icon Illustration -->
+<svg class="w-10 h-10 text-outline" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+<div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xs">hourglass_empty</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 max-w-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">Your queue is empty</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Search for an artist, track, or paste any YouTube URL to build your personal uninterrupted manual session.
+              </p>
+</div>
+<div class="flex flex-col gap-space-xs w-full">
+<button class="w-full py-space-xs rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md transition-all shadow-[0_0_16px_rgba(140,128,255,0.35)] flex items-center justify-center gap-space-xs" type="button">
+<span class="material-symbols-outlined text-base">search</span>
+<span>Search YouTube Library</span>
+</button>
+<button class="w-full py-space-xs rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-label-md transition-colors" type="button">
+                Load Saved Playlists
+              </button>
+</div>
+</div>
+</div>
+<!-- Mastering Audio Output Visualizer -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-lg flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">Output Telemetry</span>
+<span class="font-technical-mono text-technical-mono text-tertiary">96 kHz / 24-bit</span>
+</div>
+<!-- Simple Graphic Spectrum Bar Visualizer -->
+<div class="h-20 bg-surface-container-lowest rounded-lg p-space-sm flex items-end justify-between gap-1 shadow-inner">
+<div class="w-full bg-primary/40 rounded-t h-[40%] animate-pulse"></div>
+<div class="w-full bg-primary/60 rounded-t h-[65%]"></div>
+<div class="w-full bg-primary/90 rounded-t h-[85%] animate-pulse"></div>
+<div class="w-full bg-secondary rounded-t h-[50%]"></div>
+<div class="w-full bg-primary rounded-t h-[95%]"></div>
+<div class="w-full bg-tertiary rounded-t h-[75%] animate-pulse"></div>
+<div class="w-full bg-tertiary rounded-t h-[60%]"></div>
+<div class="w-full bg-tertiary rounded-t h-[30%]"></div>
+<div class="w-full bg-primary/70 rounded-t h-[45%]"></div>
+<div class="w-full bg-secondary rounded-t h-[80%] animate-pulse"></div>
+<div class="w-full bg-primary rounded-t h-[90%]"></div>
+<div class="w-full bg-tertiary rounded-t h-[35%]"></div>
+</div>
+<div class="flex items-center justify-between text-outline font-technical-mono text-technical-mono">
+<span>20 Hz</span>
+<span>1 kHz</span>
+<span>20 kHz</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Clear Entire Queue Confirmation Dialog Modal (Hidden by Default) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-surface-container-lowest/80 backdrop-blur-md hidden transition-opacity" id="clear-modal">
+<div class="bg-surface-container rounded-xl p-space-xl max-w-md w-full mx-gutter shadow-2xl flex flex-col gap-space-md transform transition-transform">
+<div class="w-12 h-12 rounded-xl bg-error-container/30 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-2xl">warning</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<h3 class="font-headline-md text-headline-md text-on-surface">Clear Entire Queue?</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Are you sure you want to clear all <strong class="text-on-surface" id="modal-song-count">8 songs</strong> from the active playback sequence? This manual arrangement cannot be undone.
+        </p>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-xs">
+<button class="px-space-md py-space-xs rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-md text-label-md transition-colors" onclick="closeClearModal()" type="button">
+          Cancel
+        </button>
+<button class="px-space-md py-space-xs rounded-lg bg-error hover:bg-error-container text-on-error font-label-md text-label-md transition-colors shadow-lg" onclick="confirmClearQueue()" type="button">
+          Yes, Clear Queue
+        </button>
+</div>
+</div>
+</div>
+<!-- Client-Side Vanilla JS for Micro-Interactions -->
+
+</section>
+
+<!-- VIEW 3: NOW PLAYING THEATER & WAVEFORM INSPECTOR -->
+<section id="view-now-playing" class="view-panel w-full hidden">
+<div class="flex flex-col w-full">
+<div class="w-full px-gutter md:px-gutter-desktop py-space-lg max-w-[1720px] mx-auto">
+<!-- Top System Telemetry Bar (No double header, purely functional audiophile telemetry) -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm mb-space-lg">
+<div class="flex items-center gap-space-sm">
+<span class="inline-flex items-center gap-space-xs px-space-sm py-1 rounded bg-surface-container-low text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(123,216,175,0.7)] animate-pulse"></span>
+<span class="font-technical-mono text-technical-mono tracking-wider uppercase">Bit-Perfect 1080p Stream</span>
+</span>
+<span class="hidden sm:inline-flex items-center px-space-sm py-1 rounded bg-surface-container-low text-on-surface-variant font-technical-mono text-technical-mono">
+          DSP: FLAT PASS-THROUGH
+        </span>
+<span class="inline-flex items-center gap-1 px-space-sm py-1 rounded bg-surface-container-low text-primary font-technical-mono text-technical-mono">
+<span class="material-symbols-outlined text-sm">lock</span> MANUAL CURATION ONLY
+        </span>
+</div>
+<div class="flex items-center gap-space-sm">
+<!-- Quick Action Trigger: View Skip Fallback Demo -->
+<button class="flex items-center gap-space-xs px-space-sm py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-all font-label-md text-label-md" id="toggle-fallback-btn" type="button">
+<span class="material-symbols-outlined text-sm text-error">warning</span>
+<span>Simulate Restricted Stream</span>
+</button>
+<!-- Queue Drawer Toggle Button -->
+<button class="flex items-center gap-space-xs px-space-md py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-primary transition-all font-label-md text-label-md shadow-sm" id="queue-toggle-trigger" type="button">
+<span class="material-symbols-outlined text-base">format_list_numbered</span>
+<span class="font-headline-sm text-headline-sm text-primary">Queue</span>
+<span class="px-1.5 py-0.5 rounded bg-primary/20 text-primary font-technical-mono text-technical-mono">7 Remaining</span>
+</button>
+</div>
+</div>
+<!-- Main Workspace: Asymmetric 12-Column Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-xl items-start">
+<!-- Primary Center Stage (Player, Waveform, Metadata, Controls) -->
+<section class="xl:col-span-8 flex flex-col gap-space-lg">
+<!-- Embedded YouTube Player Theater with Ambient Violet Glow -->
+<div class="relative w-full rounded-2xl p-1 bg-surface-container-lowest shadow-[0_0_48px_-8px_rgba(116,101,240,0.3)]">
+<!-- Backlit Violet Dispersion Aura -->
+<div class="absolute -inset-1 bg-gradient-to-r from-primary-container/20 via-primary/30 to-secondary-container/20 rounded-2xl blur-xl opacity-75 pointer-events-none"></div>
+<div class="relative w-full aspect-video rounded-xl bg-surface-container-lowest overflow-hidden shadow-2xl flex flex-col justify-between">
+<!-- Simulated YouTube Video Stream Canvas / Dynamic Song Stage -->
+<div id="np-stage-canvas" class="absolute inset-0 bg-cover bg-center transition-all duration-500 bg-surface-container-lowest flex items-center justify-center">
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-surface-container-lowest/60"></div>
+<div id="np-empty-stage" class="hidden relative z-10 flex-col items-center justify-center text-center p-4">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant mb-2 opacity-60">music_off</span>
+<span class="font-headline-sm text-sm text-on-surface-variant">No Track Playing</span>
+<span class="font-technical-mono text-xs text-outline mt-1">Select a song from your Queue to begin</span>
+</div>
+</div>
+<!-- YouTube Native Header Overlay -->
+<div class="relative z-10 p-space-md flex items-center justify-between bg-gradient-to-b from-surface-container-lowest/90 to-transparent">
+<div class="flex items-center gap-space-sm min-w-0 pr-2">
+<div class="w-8 h-8 rounded-full bg-error flex items-center justify-center text-white shadow-md flex-shrink-0">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+<div class="flex flex-col truncate">
+<span id="np-stage-title" class="font-label-md text-label-md text-on-surface truncate drop-shadow">No Track Playing</span>
+<span id="np-stage-url" class="font-technical-mono text-technical-mono text-on-surface-variant drop-shadow truncate">youtube.com</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0">
+<span class="px-space-xs py-0.5 rounded bg-surface-container-lowest/80 backdrop-blur-md text-on-surface-variant font-technical-mono text-technical-mono flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> 1080p60
+                </span>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="YouTube Player Settings" type="button">
+<span class="material-symbols-outlined text-lg">settings</span>
+</button>
+</div>
+</div>
+<!-- YouTube Video Center Watermark / Overlay Graphic -->
+<div class="relative z-10 flex-1 flex items-center justify-center pointer-events-none">
+<div class="w-16 h-16 rounded-full bg-surface-container-lowest/40 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-3xl text-primary" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<!-- YouTube Player Live Telemetry Footer Overlay -->
+<div class="relative z-10 p-space-md flex items-center justify-between bg-gradient-to-t from-surface-container-lowest/95 via-surface-container-lowest/60 to-transparent">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-base animate-pulse">equalizer</span>
+<span class="font-technical-mono text-technical-mono text-primary uppercase">Iframe Master Locked</span>
+</div>
+<span class="font-technical-mono text-technical-mono text-on-surface-variant">Buffer: 42s ahead</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-technical-mono text-technical-mono text-on-surface-variant">Audio Engine: Opus 160kbps</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Video Details & Attribution Metadata Panel -->
+<div class="w-full bg-surface-container p-space-lg rounded-xl shadow-md">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<!-- Left: Title, Artist, Badges -->
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-space-sm flex-wrap">
+<h1 id="np-track-title" class="font-headline-lg text-headline-lg text-on-surface tracking-tight truncate">No Track Selected</h1>
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded bg-primary/10 text-primary font-technical-mono text-technical-mono">
+<span class="material-symbols-outlined text-xs">audiotrack</span> HD Audio / High Bitrate
+                </span>
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded bg-tertiary/10 text-tertiary font-technical-mono text-technical-mono">
+<span class="material-symbols-outlined text-xs">verified</span> Bit-Perfect Verified
+                </span>
+</div>
+<div class="flex items-center gap-space-sm mt-1 flex-wrap">
+<div class="flex items-center gap-1.5 text-on-surface">
+<span id="np-track-artist" class="font-headline-sm text-headline-sm">Manual Queue Empty</span>
+<span class="material-symbols-outlined text-primary text-base" title="Verified Artist Channel">check_circle</span>
+</div>
+<span class="text-outline-variant">•</span>
+<span class="font-body-md text-body-md text-on-surface-variant">1.48M subscribers</span>
+<span class="text-outline-variant">•</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Official Music Video</span>
+</div>
+<!-- Tags and Source Attributions -->
+<div class="flex items-center gap-space-xs mt-space-sm flex-wrap">
+<span class="inline-flex items-center gap-1 px-space-sm py-1 rounded bg-surface-container-high text-on-surface-variant font-technical-mono text-technical-mono">
+<span class="material-symbols-outlined text-xs text-primary">search</span> Added manually via YouTube Search
+                </span>
+<span class="inline-flex items-center gap-1 px-space-sm py-1 rounded bg-surface-container-high text-on-surface-variant font-technical-mono text-technical-mono">
+<span class="material-symbols-outlined text-xs text-error">smart_display</span> Powered by official YouTube Embedded Player API
+                </span>
+<span class="inline-flex items-center gap-1 px-space-sm py-1 rounded bg-surface-container-high text-on-surface-variant font-technical-mono text-technical-mono">
+<span class="material-symbols-outlined text-xs">sync_disabled</span> Zero Auto-Suggestions
+                </span>
+</div>
+</div>
+<!-- Right: Interactive Track Utility Actions -->
+<div class="flex md:flex-col items-end justify-between gap-space-sm flex-shrink-0">
+<div class="flex items-center gap-space-xs">
+<button class="w-10 h-10 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-all shadow-sm" title="Add to Custom Storage Basket" type="button">
+<span class="material-symbols-outlined text-lg">bookmark_add</span>
+</button>
+<button class="w-10 h-10 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-all shadow-sm" title="Copy YouTube Raw Link" type="button">
+<span class="material-symbols-outlined text-lg">link</span>
+</button>
+<button class="w-10 h-10 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-all shadow-sm" title="Inspect Audio Headers" type="button">
+<span class="material-symbols-outlined text-lg">analytics</span>
+</button>
+</div>
+<!-- Next Track Fast Peek Pill -->
+<div class="flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-surface-container-lowest text-on-surface-variant">
+<span class="font-technical-mono text-technical-mono uppercase text-primary">Up Next:</span>
+<span id="np-up-next-title" class="font-label-md text-label-md text-on-surface truncate max-w-[160px]">Queue complete</span>
+<button class="p-0.5 hover:text-primary transition-colors flex items-center" title="Skip to this track" type="button">
+<span class="material-symbols-outlined text-sm">skip_next</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Expanded Audio Waveform & Precision Scrubber Console -->
+<div class="w-full bg-surface-container p-space-lg rounded-xl shadow-md flex flex-col gap-space-md">
+<!-- Waveform Visualization & Time Markers -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between font-technical-mono text-technical-mono">
+<div class="flex items-center gap-2">
+<span id="np-time-cur" class="text-primary font-bold">00:00</span>
+<span class="text-outline-variant">/</span>
+<span id="np-time-total" class="text-on-surface-variant">00:00</span>
+</div>
+<div class="flex items-center gap-space-md text-on-surface-variant">
+<span>Peak: -0.2 dBFS</span>
+<span>DR12 (Audiophile Master)</span>
+<span class="text-tertiary">SYNCED</span>
+</div>
+</div>
+<!-- Precision Audio Waveform Bar Matrix SVG -->
+<div class="relative w-full h-16 bg-surface-container-lowest rounded-lg p-2 overflow-hidden flex items-end justify-between gap-[2px] cursor-pointer group shadow-inner">
+<!-- Active Playhead Glow Indicator Line -->
+<div class="absolute top-0 bottom-0 left-[39.4%] w-[2px] bg-primary z-20 shadow-[0_0_10px_#c6bfff]"></div>
+<!-- Left Played Progress Scrim -->
+<div class="absolute top-0 bottom-0 left-0 w-[39.4%] bg-primary/10 pointer-events-none z-10"></div>
+<!-- Interactive SVG Dynamic Bars: 64 discrete sample blocks -->
+<svg class="w-full h-full" fill="none" preserveaspectratio="none" viewbox="0 0 400 60">
+<!-- Played Amplitude Range (Primary Glow) -->
+<path class="text-primary" d="M2,45 L2,55 M8,40 L8,55 M14,30 L14,55 M20,20 L20,55 M26,38 L26,55 M32,15 L32,55 M38,25 L38,55 M44,12 L44,55 M50,18 L50,55 M56,35 L56,55 M62,8 L62,55 M68,14 L68,55 M74,22 L74,55 M80,30 L80,55 M86,16 L86,55 M92,10 L92,55 M98,24 L98,55 M104,38 L104,55 M110,12 L110,55 M116,28 L116,55 M122,18 L122,55 M128,42 L128,55 M134,14 L134,55 M140,20 L140,55 M146,8 L146,55 M152,16 L152,55 M158,32 L158,55" stroke="currentColor" stroke-linecap="round" stroke-width="3"></path>
+<!-- Unplayed Amplitude Range (Muted Surface) -->
+<path class="text-surface-variant" d="M164,24 L164,55 M170,18 L170,55 M176,36 L176,55 M182,12 L182,55 M188,28 L188,55 M194,14 L194,55 M200,22 L200,55 M206,40 L206,55 M212,18 L212,55 M218,26 L218,55 M224,10 L224,55 M230,16 L230,55 M236,32 L236,55 M242,14 L242,55 M248,22 L248,55 M254,38 L254,55 M260,12 L260,55 M266,20 L266,55 M272,34 L272,55 M278,16 L278,55 M284,28 L284,55 M290,14 L290,55 M296,24 L296,55 M302,40 L302,55 M308,18 L308,55 M314,26 L314,55 M320,12 L320,55 M326,20 L326,55 M332,36 L332,55 M338,15 L338,55 M344,22 L344,55 M350,30 L350,55 M356,18 L356,55 M362,26 L362,55 M368,14 L368,55 M374,22 L374,55 M380,38 L380,55 M386,16 L386,55 M392,28 L392,55 M398,34 L398,55" stroke="currentColor" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+</div>
+<!-- Standard Micro Horizontal Scrub Line -->
+<div class="relative w-full h-1.5 bg-surface-container-lowest rounded-full overflow-hidden cursor-pointer group">
+<div id="np-scrub-bar" class="h-full bg-gradient-to-r from-primary-container to-primary rounded-full transition-all" style="width: 0%;"></div>
+</div>
+</div>
+<!-- Transport Deck & Audio Adjustments Grid -->
+<div class="flex flex-col lg:flex-row items-center justify-between gap-space-lg pt-space-xs">
+<!-- Group 1: Volume Slider & Speed Controls -->
+<div class="flex items-center gap-space-md w-full lg:w-auto justify-between lg:justify-start">
+<div class="flex items-center gap-space-xs">
+<button class="text-on-surface-variant hover:text-on-surface transition-colors flex items-center" title="Mute/Unmute" type="button">
+<span class="material-symbols-outlined text-lg">volume_up</span>
+</button>
+<div class="w-24 h-1.5 bg-surface-container-lowest rounded-full overflow-hidden cursor-pointer relative">
+<div class="h-full bg-primary-fixed-dim rounded-full" style="width: 78%;"></div>
+</div>
+<span class="font-technical-mono text-technical-mono text-on-surface-variant w-8">78%</span>
+</div>
+<!-- Speed Selector Switch -->
+<div class="flex items-center rounded-lg bg-surface-container-lowest p-0.5">
+<button class="px-2 py-0.5 rounded text-primary bg-surface-container font-technical-mono text-technical-mono" type="button">1.0x</button>
+<button class="px-2 py-0.5 rounded text-on-surface-variant hover:text-on-surface font-technical-mono text-technical-mono" type="button">1.25x</button>
+<button class="px-2 py-0.5 rounded text-on-surface-variant hover:text-on-surface font-technical-mono text-technical-mono" type="button">1.5x</button>
+</div>
+</div>
+<!-- Group 2: Hero Playback Transport Controls -->
+<div class="flex items-center gap-space-lg">
+<!-- Shuffle Manual Queue -->
+<button onclick="shuffleQueue()" class="relative group p-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-all flex items-center justify-center shadow-sm cursor-pointer" title="Shuffle manual queue" type="button">
+<span class="material-symbols-outlined text-lg">shuffle</span>
+<span class="hidden group-hover:block absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-surface-container-lowest text-on-surface font-technical-mono text-technical-mono whitespace-nowrap shadow-lg">
+                  Shuffle manual queue
+                </span>
+</button>
+<!-- Previous Song -->
+<button onclick="playPrev()" class="w-11 h-11 rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface hover:text-primary transition-all flex items-center justify-center shadow-sm cursor-pointer" title="Previous Track" type="button">
+<span class="material-symbols-outlined text-xl">skip_previous</span>
+</button>
+<!-- Hero Play/Pause Button with Violet Glow Elevation -->
+<button class="w-16 h-16 rounded-full bg-gradient-to-tr from-secondary-container via-primary-container to-primary hover:from-primary hover:to-secondary-fixed text-on-primary flex items-center justify-center shadow-[0_0_32px_rgba(140,128,255,0.45)] hover:shadow-[0_0_42px_rgba(198,191,255,0.65)] hover:scale-105 active:scale-95 transition-all" id="np-play-pause-btn" onclick="togglePlayPause()" title="Play/Pause" type="button" class="w-16 h-16 rounded-full bg-gradient-to-tr from-secondary-container via-primary-container to-primary hover:from-primary hover:to-secondary-fixed text-on-primary flex items-center justify-center shadow-[0_0_32px_rgba(0,255,102,0.45)] hover:scale-105 active:scale-95 transition-all cursor-pointer"><span class="material-symbols-outlined text-3xl font-bold">play_arrow</span>
+</button>
+<!-- Next Song -->
+<button onclick="playNext()" class="w-11 h-11 rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface hover:text-primary transition-all flex items-center justify-center shadow-sm cursor-pointer" title="Next Track" type="button">
+<span class="material-symbols-outlined text-xl">skip_next</span>
+</button>
+<!-- Repeat Mode Cycle Toggle Button -->
+<button onclick="toggleLoop()" class="relative group p-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-all flex items-center gap-1 shadow-sm cursor-pointer" id="np-loop-btn" title="Toggle Loop Queue" type="button">
+<span class="material-symbols-outlined text-lg">repeat</span>
+<span class="font-technical-mono text-technical-mono uppercase">Track</span>
+<span class="hidden group-hover:block absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-surface-container-lowest text-on-surface font-technical-mono text-technical-mono whitespace-nowrap shadow-lg">
+                  Mode: Repeat Single Track
+                </span>
+</button>
+</div>
+<!-- Group 3: Auxiliary Video Features -->
+<div class="flex items-center gap-space-sm w-full lg:w-auto justify-end">
+<button class="flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all shadow-sm" title="Toggle Fullscreen YouTube Video" type="button">
+<span class="material-symbols-outlined text-base">fullscreen</span>
+<span class="hidden sm:inline">Theater Fullscreen</span>
+</button>
+<button class="p-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-all shadow-sm" title="Audio Equalizer Preset" type="button">
+<span class="material-symbols-outlined text-base">tune</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Sidebar / Queue Drawer Panel (Manual 8-Track Pool View) -->
+<aside class="xl:col-span-4 flex flex-col gap-space-lg">
+<!-- Strict Queue Policy Notification Card -->
+<div class="w-full bg-surface-container-low p-space-md rounded-xl shadow-sm">
+<div class="flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-tertiary text-xl mt-0.5">do_not_disturb_on</span>
+<div class="flex flex-col gap-1">
+<span class="font-headline-sm text-headline-sm text-tertiary">Zero-Recommendation Guarantee</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                Playback will stop automatically after track 8 (<span class="text-on-surface font-bold">Lorn - Acid Rain</span>). No YouTube autoplay or algorithmic suggestions will ever play.
+              </p>
+</div>
+</div>
+</div>
+<!-- Manual Queue Stack Section -->
+<div class="w-full bg-surface-container p-space-md rounded-xl shadow-md flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">Up Next in Queue</span>
+<span class="px-space-xs py-0.5 rounded-full bg-primary/20 text-primary font-technical-mono text-technical-mono">7 tracks</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="text-on-surface-variant hover:text-on-surface transition-colors p-1" title="Clear all upcoming tracks" type="button">
+<span class="material-symbols-outlined text-sm text-error">delete_sweep</span>
+</button>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors p-1" title="Add song by YouTube URL or query" type="button">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+<!-- Queue Items List -->
+<div id="np-queue-items-container" class="flex flex-col gap-space-xs max-h-[420px] overflow-y-auto pr-1"></div>
+<!-- Queue Footer Diagnostics -->
+<div class="pt-space-xs flex items-center justify-between text-on-surface-variant font-technical-mono text-technical-mono">
+<span>Remaining Runtime: 28m 41s</span>
+<span class="text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">radio_button_checked</span> Strict Mode
+            </span>
+</div>
+</div>
+
+<!-- ================= AI TRACK ADVISOR (SUGGEST-ONLY COMPANION) ================= -->
+<div id="ai-advisor-panel" class="w-full bg-surface-container rounded-xl shadow-md p-space-md flex flex-col gap-space-sm amoled-border">
+  <!-- Card Header -->
+  <div class="flex items-center justify-between gap-space-xs">
+    <div class="flex items-center gap-space-xs">
+      <span class="material-symbols-outlined text-primary text-xl">auto_awesome</span>
+      <h3 class="font-headline-sm text-headline-sm text-on-surface">AI Track Advisor</h3>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <button onclick="refreshAiAdvisor(true)" class="p-1 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-all cursor-pointer" title="Refresh Recommendations" type="button">
+        <span id="ai-advisor-refresh-icon" class="material-symbols-outlined text-base">refresh</span>
+      </button>
+      <button onclick="toggleAiAdvisorCard()" class="p-1 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer" title="Collapse / Expand Advisor" type="button">
+        <span id="ai-advisor-collapse-icon" class="material-symbols-outlined text-base">expand_less</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Strict Guarantee Badge -->
+  <div class="flex items-center justify-between gap-2 px-2.5 py-1 rounded-lg bg-surface-container-low border border-outline-variant/15 text-[10px] font-technical-mono">
+    <span class="text-tertiary flex items-center gap-1">
+      <span class="material-symbols-outlined text-xs">verified</span>
+      SUGGESTIONS ONLY • NEVER AUTOPLAYS
+    </span>
+    <span id="ai-advisor-engine-badge" class="text-on-surface-variant uppercase">Built-in AI</span>
+  </div>
+
+  <!-- Collapsible Container Body -->
+  <div id="ai-advisor-content" class="flex flex-col gap-space-sm transition-all duration-300">
+    <!-- Vibe Steering Pills -->
+    <div class="flex items-center gap-1.5 overflow-x-auto pb-1 pt-0.5 no-scrollbar" id="ai-advisor-vibe-pills">
+      <button onclick="setAiVibe('same_vibe')" data-vibe="same_vibe" class="ai-vibe-pill px-2.5 py-1 rounded-full text-xs font-label-md whitespace-nowrap transition-all cursor-pointer bg-primary text-on-primary shadow-sm" type="button">
+        Same Vibe
+      </button>
+      <button onclick="setAiVibe('slowed')" data-vibe="slowed" class="ai-vibe-pill px-2.5 py-1 rounded-full text-xs font-label-md whitespace-nowrap transition-all cursor-pointer bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest" type="button">
+        Slowed / Bass
+      </button>
+      <button onclick="setAiVibe('remix')" data-vibe="remix" class="ai-vibe-pill px-2.5 py-1 rounded-full text-xs font-label-md whitespace-nowrap transition-all cursor-pointer bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest" type="button">
+        Mashups & Remixes
+      </button>
+      <button onclick="setAiVibe('discovery')" data-vibe="discovery" class="ai-vibe-pill px-2.5 py-1 rounded-full text-xs font-label-md whitespace-nowrap transition-all cursor-pointer bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest" type="button">
+        Fresh Discovery
+      </button>
+    </div>
+
+    <!-- Suggestions List Container -->
+    <div id="ai-advisor-list" class="flex flex-col gap-2 min-h-[140px]">
+      <!-- Populated dynamically via JS -->
+    </div>
+  </div>
+</div>
+<!-- ================= END AI TRACK ADVISOR ================= -->
+
+<!-- Audiophile Audio Stream Output Diagnostic Box -->
+<div class="w-full bg-surface-container p-space-md rounded-xl shadow-md flex flex-col gap-space-sm">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Engine Telemetry</span>
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="p-space-sm rounded bg-surface-container-low flex flex-col">
+<span class="font-technical-mono text-technical-mono text-on-surface-variant">DAC Route</span>
+<span class="font-label-md text-label-md text-on-surface truncate">External ASIO Interface</span>
+</div>
+<div class="p-space-sm rounded bg-surface-container-low flex flex-col">
+<span class="font-technical-mono text-technical-mono text-on-surface-variant">Audio Format</span>
+<span class="font-label-md text-label-md text-tertiary truncate">WebM/Opus @ 48kHz</span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Fallback / Unavailable Video State Modal (UX Requirement 4) -->
+<!-- Display controlled via JS toggle or default hidden state -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center p-space-md bg-surface-container-lowest/80 backdrop-blur-md" id="fallback-modal">
+<div class="relative w-full max-w-lg rounded-2xl bg-surface-container p-space-lg shadow-2xl flex flex-col gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-error-container/20 text-error flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-2xl">no_adult_content</span>
+</div>
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Video Unavailable / Restricted</h2>
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-technical-mono text-technical-mono uppercase">Geo Block</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              The official YouTube stream for <span class="text-on-surface font-semibold">'Kavinsky - Nightcall'</span> cannot be embedded in your region.
+            </p>
+</div>
+</div>
+<!-- Automatic Fallback Countdown Timer Progress Bar -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between font-technical-mono text-technical-mono">
+<span class="text-primary font-bold">Auto-Skipping to Next Track</span>
+<span class="text-tertiary" id="countdown-ticker">Skipping in 5s...</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000" id="countdown-bar" style="width: 100%;"></div>
+</div>
+<span class="font-body-sm text-body-sm text-outline">Next: M83 - Midnight City</span>
+</div>
+<!-- Fallback Manual Interventions -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Select Verified Audio Mirror</span>
+<button class="w-full flex items-center justify-between p-space-sm rounded-lg bg-surface-container-high hover:bg-surface-container-highest transition-all text-left" type="button">
+<div class="flex items-center gap-space-sm truncate">
+<span class="material-symbols-outlined text-primary text-base">music_note</span>
+<div class="flex flex-col truncate">
+<span class="font-label-md text-label-md text-on-surface truncate">Nightcall (Drive Official Audio Edit)</span>
+<span class="font-technical-mono text-technical-mono text-on-surface-variant">Record Makers Channel • 4:19 • 1080p Stream</span>
+</div>
+</div>
+<span class="font-technical-mono text-technical-mono text-tertiary px-2 py-0.5 rounded bg-tertiary/10">SWAP</span>
+</button>
+</div>
+<!-- Action Row -->
+<div class="flex items-center justify-end gap-space-sm pt-space-xs">
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all" id="cancel-fallback-btn" type="button">
+            Dismiss Alert
+          </button>
+<button class="px-space-md py-1.5 rounded-lg bg-primary hover:bg-primary-fixed text-on-primary font-label-md text-label-md transition-all shadow-sm" id="instant-skip-btn" type="button">
+            Skip Immediately
+          </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</section>
+
+<!-- VIEW 4: SETTINGS & COMPLIANCE PREFERENCES -->
+<section id="view-settings" class="view-panel w-full hidden">
+<div class="flex flex-col w-full">
+<!-- Subtle Ambient Glow Backdrop Decorator -->
+<div class="relative w-full max-w-7xl mx-auto px-gutter-desktop py-space-xl">
+<div class="absolute top-0 right-1/4 w-96 h-96 bg-primary-container/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<div class="absolute bottom-10 left-10 w-80 h-80 bg-tertiary-container/5 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<!-- Header & Subheader Zone -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-xl">
+<div>
+<div class="flex items-center gap-space-xs mb-1">
+<span class="font-technical-mono text-technical-mono text-tertiary uppercase tracking-widest px-2 py-0.5 rounded-full bg-tertiary/10">Audiophile Workstation</span>
+<span class="text-outline text-xs">•</span>
+<span class="font-technical-mono text-technical-mono text-on-surface-variant">Console Config v2.4.0</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">System & Playback Preferences</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Calibrate engine behaviors, local isolation rules, audio output limits, and storage mirrors.</p>
+</div>
+<!-- Quick Status Pill -->
+<div class="flex items-center gap-space-sm px-space-md py-space-sm bg-surface-container rounded-xl shadow-md">
+<div class="w-2.5 h-2.5 rounded-full bg-tertiary shadow-[0_0_8px_rgba(123,216,175,0.7)] animate-pulse"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface uppercase tracking-wider">Engine Status</span>
+<span class="font-technical-mono text-technical-mono text-on-surface-variant">Zero-Algorithm Mode Armed</span>
+</div>
+</div>
+</div>
+<!-- Two-Column Master Workstation Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- ================= LEFT COLUMN: Engine Behavior & Data Management ================= -->
+<div class="lg:col-span-7 flex flex-col gap-space-lg">
+<!-- 1. Playback & Queue Behavior (Core Ethos) -->
+<section class="bg-surface-container rounded-xl p-space-lg shadow-md flex flex-col gap-space-lg">
+<div class="flex items-center justify-between pb-space-sm bg-gradient-to-r from-transparent via-primary/5 to-transparent">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-xl">tune</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Playback & Queue Behavior</h2>
+</div>
+<span class="font-technical-mono text-technical-mono text-primary bg-primary/10 px-2 py-0.5 rounded">Core Ethos</span>
+</div>
+<!-- Zero Autoplay Guarantee Card (Non-negotiable lock) -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md shadow-sm">
+<div class="space-y-1 pr-2">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-on-surface">Zero-Autoplay Guarantee</span>
+<span class="flex items-center gap-0.5 px-2 py-0.5 rounded bg-tertiary/10 text-tertiary font-technical-mono text-technical-mono">
+<span class="material-symbols-outlined text-xs">verified</span>
+                  STRICT LOCK
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                Strict compliance: No YouTube related videos, algorithm-curated playlists, or sponsored recommendations ever enter your playback stream.
+              </p>
+</div>
+<!-- Locked Toggle -->
+<div class="flex items-center gap-space-xs flex-shrink-0 cursor-not-allowed opacity-90" title="This protocol is permanently locked for fidelity.">
+<div class="w-12 h-6 bg-primary-container rounded-full p-0.5 relative transition-colors flex items-center justify-end">
+<div class="w-5 h-5 rounded-full bg-on-primary shadow-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container text-xs">lock</span>
+</div>
+</div>
+</div>
+</div>
+<!-- YouTube Data API v3 Key (Optional) -->
+<div class="flex flex-col gap-space-xs p-space-sm bg-surface-container-low rounded-lg">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-base">key</span>
+<span class="font-label-md text-label-md text-on-surface">YouTube Data API v3 Key (Optional)</span>
+</div>
+<span class="font-technical-mono text-[10px] text-tertiary uppercase bg-tertiary/10 px-2 py-0.5 rounded">Zero-Key Fallback Active</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">The app uses a zero-key search engine by default. You may optionally provide your personal Google Cloud YouTube API Key for official quotas.</p>
+<div class="flex items-center gap-space-xs mt-1">
+<input id="youtube-api-key-input" class="flex-1 h-9 px-space-sm rounded-lg bg-surface-container text-on-surface placeholder:text-outline font-body-sm text-xs amoled-border outline-none focus:ring-1 focus:ring-primary" placeholder="AIzaSy... (Leave blank for zero-key search engine)" type="password" autocomplete="off">
+<button onclick="saveYoutubeApiKey()" class="h-9 px-space-md rounded-lg bg-surface-container-high hover:bg-surface-bright text-primary font-label-md text-xs amoled-border transition-all cursor-pointer">
+Save Key
+</button>
+</div>
+</div>
+
+<!-- Gemini API Key for AI Track Advisor (Optional) -->
+<div class="flex flex-col gap-space-xs p-space-sm bg-surface-container-low rounded-lg">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-base">auto_awesome</span>
+<span class="font-label-md text-label-md text-on-surface">Gemini API Key (AI Recommendations)</span>
+</div>
+<span id="gemini-key-status-badge" class="font-technical-mono text-[10px] text-tertiary uppercase bg-tertiary/10 px-2 py-0.5 rounded">Smart Query Engine Active</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Provide your Gemini API Key to enable neural track matching (gemini-2.5-flash) with reasoning tags. Leave blank for built-in algorithmic query generator.</p>
+<div class="flex items-center gap-space-xs mt-1">
+<input id="gemini-api-key-input" class="flex-1 h-9 px-space-sm rounded-lg bg-surface-container text-on-surface placeholder:text-outline font-body-sm text-xs amoled-border outline-none focus:ring-1 focus:ring-primary" placeholder="AIzaSy... (Optional: powers Deep AI advisor)" type="password" autocomplete="off">
+<button onclick="saveGeminiApiKey()" class="h-9 px-space-md rounded-lg bg-surface-container-high hover:bg-surface-bright text-primary font-label-md text-xs amoled-border transition-all cursor-pointer">
+Save Key
+</button>
+</div>
+</div>
+
+<!-- Local Storage Queue Persistence -->
+<div class="flex items-center justify-between p-space-sm bg-surface-container-low rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Queue Session Persistence</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Save active queue in browser storage so session persists across tab restarts.</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer ml-space-md">
+<input checked="" class="sr-only peer" id="queue-persist" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+</section>
+<!-- 3. Data & Queue Backup / Migration -->
+<section class="bg-surface-container rounded-xl p-space-lg shadow-md flex flex-col gap-space-lg">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-xl">sync_saved_locally</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Data, Backup & Migration</h2>
+</div>
+<span class="font-technical-mono text-technical-mono text-on-surface-variant">Zero Cloud Lock-in</span>
+</div>
+<!-- Restore Defaults -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
+<div class="space-y-0.5">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-base">playlist_add_check</span>
+<span class="font-label-md text-label-md text-on-surface">Restore Default Playlist</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Reloads the curated 5-track clean playlist into your active queue.</p>
+</div>
+<button class="px-space-md py-space-xs bg-surface-container-high hover:bg-surface-container-highest text-primary font-label-md text-label-md rounded flex-shrink-0 transition-all shadow-sm" onclick="loadDefaultPlaylist()" type="button">
+  Load Defaults
+</button>
+</div>
+<!-- Danger Zone: Reset Data -->
+<div class="p-space-md rounded-xl bg-error-container/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
+<div class="space-y-0.5">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-error text-base">warning</span>
+<span class="font-label-md text-label-md text-error">Flush Local Storage & Reset</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Purges all cached song tokens, manual playlist order, and restores factory studio preferences.</p>
+</div>
+<button class="px-space-md py-space-xs bg-error hover:bg-error/90 text-on-error font-label-md text-label-md rounded flex-shrink-0 transition-all shadow-sm" id="btn-open-clear-modal" type="button">
+              Clear Saved Data
+            </button>
+</div>
+</section>
+</div>
+<!-- ================= RIGHT COLUMN: Themes, Telemetry & Compliance ================= -->
+<div class="lg:col-span-5 flex flex-col gap-space-lg">
+<!-- 2. Theme & Visual Preferences -->
+<section class="bg-surface-container rounded-xl p-space-lg shadow-md flex flex-col gap-space-lg">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-xl">palette</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Appearance Console</h2>
+</div>
+<span class="font-technical-mono text-technical-mono text-primary bg-primary/10 px-2 py-0.5 rounded">OLED Engine</span>
+</div>
+<!-- Color Mode Selector Cards -->
+<div class="space-y-space-sm">
+<label class="font-label-md text-label-md text-on-surface">Console Surface Theme</label>
+<div class="grid grid-cols-2 gap-space-sm" id="theme-selector-group">
+<!-- Audiophile Dark -->
+<div class="relative p-space-sm rounded-xl cursor-pointer transition-all flex flex-col justify-between h-24 theme-card" data-theme="dark" style="background-color: #0D110F;">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Audiophile Dark</span>
+<span class="theme-check material-symbols-outlined text-primary text-sm hidden">check_circle</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="w-3.5 h-3.5 rounded-full bg-[#151B18] border border-[#1F2923]"></div>
+<div class="w-3.5 h-3.5 rounded-full bg-[#00FF66]"></div>
+<div class="w-3.5 h-3.5 rounded-full bg-[#10B981]"></div>
+<span class="font-technical-mono text-[10px] text-on-surface-variant ml-auto">Default</span>
+</div>
+</div>
+<!-- Studio Deep Slate -->
+<div class="relative p-space-sm rounded-xl cursor-pointer transition-all flex flex-col justify-between h-24 theme-card" data-theme="slate" style="background-color: #131826;">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Studio Deep Slate</span>
+<span class="theme-check material-symbols-outlined text-primary text-sm hidden">check_circle</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="w-3.5 h-3.5 rounded-full bg-[#1C2336] border border-[#2A344D]"></div>
+<div class="w-3.5 h-3.5 rounded-full bg-[#38BDF8]"></div>
+<div class="w-3.5 h-3.5 rounded-full bg-[#818CF8]"></div>
+<span class="font-technical-mono text-[10px] text-on-surface-variant ml-auto">Slate</span>
+</div>
+</div>
+<!-- High Contrast OLED -->
+<div class="relative p-space-sm rounded-xl cursor-pointer transition-all flex flex-col justify-between h-24 theme-card" data-theme="oled" style="background-color: #050505;">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">High Contrast OLED</span>
+<span class="theme-check material-symbols-outlined text-primary text-sm hidden">check_circle</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="w-3.5 h-3.5 rounded-full bg-[#111111] border border-[#262626]"></div>
+<div class="w-3.5 h-3.5 rounded-full bg-[#D8B4FE]"></div>
+<div class="w-3.5 h-3.5 rounded-full bg-[#FFFFFF]"></div>
+<span class="font-technical-mono text-[10px] text-on-surface-variant ml-auto">Pure #000</span>
+</div>
+</div>
+<!-- Light Studio Mode -->
+<div class="relative p-space-sm rounded-xl cursor-pointer transition-all flex flex-col justify-between h-24 theme-card" data-theme="light" style="background-color: #FFFFFF;">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Light Studio</span>
+<span class="theme-check material-symbols-outlined text-primary text-sm hidden">check_circle</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="w-3.5 h-3.5 rounded-full bg-[#E5E7EB] border border-[#D1D5DB]"></div>
+<div class="w-3.5 h-3.5 rounded-full bg-[#4F46E5]"></div>
+<div class="w-3.5 h-3.5 rounded-full bg-[#059669]"></div>
+<span class="font-technical-mono text-[10px] text-on-surface-variant ml-auto">Daylight</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Ambient Glow Effect Toggle -->
+<div class="p-space-sm bg-surface-container-low rounded-xl flex items-center justify-between">
+<div class="space-y-0.5">
+<span class="font-label-md text-label-md text-on-surface">Ambient Glow Illumination</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Project subtle reactive album art backlight aura across the player console stage.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer ml-space-md">
+<input checked="" class="sr-only peer" id="ambient-glow" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+<!-- Audio Waveform Visualization Simulation -->
+<div class="p-space-sm bg-surface-container-low rounded-xl flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface">Hardware Mastering Meters</span>
+<span class="font-technical-mono text-technical-mono text-tertiary">Realtime Ready</span>
+</div>
+<!-- Interactive Visual SVG Spectrum Bar Meter -->
+<div class="w-full h-14 bg-surface-container-lowest rounded-lg p-space-xs flex items-end justify-between gap-1 overflow-hidden">
+<div class="w-full eq-bar opacity-30 rounded-t h-4"></div>
+<div class="w-full eq-bar opacity-50 rounded-t h-8"></div>
+<div class="w-full eq-bar opacity-60 rounded-t h-10"></div>
+<div class="w-full eq-bar opacity-80 rounded-t h-7"></div>
+<div class="w-full eq-bar rounded-t h-12"></div>
+<div class="w-full eq-bar opacity-90 rounded-t h-11"></div>
+<div class="w-full eq-bar opacity-70 rounded-t h-6"></div>
+<div class="w-full eq-bar rounded-t h-9"></div>
+<div class="w-full eq-bar opacity-60 rounded-t h-4"></div>
+<div class="w-full eq-bar opacity-40 rounded-t h-3"></div>
+<div class="w-full eq-bar opacity-30 rounded-t h-5"></div>
+</div>
+<div class="flex justify-between font-technical-mono text-[10px] text-on-surface-variant">
+<span>32 Hz</span>
+<span>1 kHz</span>
+<span>16 kHz</span>
+</div>
+</div>
+</section>
+<!-- 4. Legal, Privacy & YouTube Compliance -->
+<section class="bg-surface-container rounded-xl p-space-lg shadow-md flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-outline text-xl">policy</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Legal & Architecture</h2>
+</div>
+<span class="font-technical-mono text-technical-mono text-tertiary px-2 py-0.5 rounded bg-tertiary/10">100% Compliant</span>
+</div>
+<!-- YouTube TOS Box -->
+<div class="p-space-sm bg-surface-container-low rounded-lg space-y-1">
+<div class="flex items-center gap-1.5 text-on-surface font-label-md text-label-md">
+<span class="material-symbols-outlined text-error text-sm">smart_display</span>
+              YouTube Terms of Service Compliance
+            </div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              QueueTune strictly uses the official YouTube Embedded Player IFrame API. All video decoding, creator royalties, monetization, copyright controls, and content rights remain exclusively governed by YouTube and respective rights holders.
+            </p>
+</div>
+<!-- Privacy Box -->
+<div class="p-space-sm bg-surface-container-low rounded-lg space-y-1">
+<div class="flex items-center gap-1.5 text-on-surface font-label-md text-label-md">
+<span class="material-symbols-outlined text-tertiary text-sm">shield</span>
+              Zero-Profiling Privacy Framework
+            </div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              No cross-site tracking, telemetry finger-printing, or algorithmic user profiling. Your listening history and custom queues reside solely inside your local browser memory space.
+            </p>
+</div>
+<!-- Technical Spec Metadata Grid -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-xs">
+<div class="p-space-sm rounded-lg bg-surface-container-lowest">
+<span class="font-technical-mono text-[10px] text-on-surface-variant uppercase tracking-wider block">Software Version</span>
+<span class="font-label-md text-label-md text-primary">QueueTune v2.4.0 (Studio)</span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container-lowest">
+<span class="font-technical-mono text-[10px] text-on-surface-variant uppercase tracking-wider block">Engine Architecture</span>
+<span class="font-label-md text-label-md text-tertiary">Direct IFrame v3 + LocalStore</span>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<!-- Clear Data Confirmation Modal (Hidden by Default) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden transition-opacity" id="clear-confirm-modal">
+<div class="relative w-full max-w-md bg-surface-container p-space-lg rounded-xl shadow-2xl flex flex-col gap-space-md animate-in fade-in zoom-in-95 duration-200">
+<div class="flex items-center gap-space-sm text-error">
+<span class="material-symbols-outlined text-2xl">report_problem</span>
+<h3 class="font-headline-sm text-headline-sm">Confirm Local Data Reset</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        This action will permanently eradicate your active track queue, custom song indexes, and restored settings from this browser's local sandbox.
+      </p>
+<div class="p-space-sm bg-error-container/20 rounded-lg text-error font-technical-mono text-technical-mono">
+        CANNOT BE UNDONE: All manually curated positions will be lost.
+      </div>
+<div class="flex items-center justify-end gap-space-sm mt-space-sm">
+<button class="px-space-md py-space-xs rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-all" id="btn-cancel-clear" type="button">
+          Cancel
+        </button>
+<button class="px-space-md py-space-xs rounded bg-error hover:bg-error/90 text-on-error font-label-md text-label-md transition-all" id="btn-confirm-clear" type="button">
+          Yes, Wipe Local Storage
+        </button>
+</div>
+</div>
+</div>
+<!-- Interactive JavaScript Handling -->
+
+</section>
+
+</div></main><footer class="fixed bottom-0 left-0 right-0 z-50 h-20 bg-surface-container-low/95 backdrop-blur-2xl shadow-[0_-4px_24px_rgba(0,0,0,0.5)]">
+<div class="h-full w-full px-gutter-desktop flex items-center justify-between gap-space-md">
+
+<!-- Left Track Metadata -->
+<div class="flex items-center gap-space-md min-w-[240px] max-w-[320px]">
+<div class="relative w-12 h-12 rounded-lg bg-surface-container-highest overflow-hidden flex-shrink-0 flex items-center justify-center shadow-inner">
+<img id="footer-thumb" class="w-full h-full object-cover hidden" alt="Current Track Thumbnail" src="">
+<span id="footer-placeholder-icon" class="material-symbols-outlined text-outline">music_note</span>
+<div class="absolute inset-0 bg-primary/10"></div>
+</div>
+<div class="flex flex-col truncate">
+<span id="footer-title" class="font-label-md text-label-md text-on-surface truncate">No Track Selected</span>
+<span id="footer-artist" class="font-body-sm text-body-sm text-on-surface-variant truncate">Manual Queue Empty</span>
+<div class="flex items-center gap-space-xs mt-0.5">
+<span id="footer-quality-chip" class="font-technical-mono text-technical-mono text-tertiary px-1 py-0.2 rounded bg-tertiary/10">Bit-Perfect Audio</span>
+</div>
+</div>
+</div>
+
+<!-- Center Controls & Scrubber -->
+<div class="flex flex-col items-center gap-1.5 flex-1 max-w-2xl px-space-md">
+<div class="flex items-center gap-space-md">
+<button onclick="shuffleQueue()" class="text-on-surface-variant hover:text-on-surface transition-colors flex items-center cursor-pointer" title="Shuffle Remaining Queue" type="button">
+<span class="material-symbols-outlined text-sm">shuffle</span>
+</button>
+<button onclick="playPrev()" class="text-on-surface-variant hover:text-on-surface transition-colors flex items-center cursor-pointer" title="Previous Track" type="button">
+<span class="material-symbols-outlined text-lg">skip_previous</span>
+</button>
+<button id="footer-play-pause-btn" class="w-10 h-10 rounded-full bg-primary-container hover:bg-primary text-on-primary flex items-center justify-center shadow-[0_0_16px_rgba(140,128,255,0.4)] transition-all cursor-pointer" title="Play / Pause" type="button">
+<span class="material-symbols-outlined text-xl">play_arrow</span>
+</button>
+<button onclick="playNext()" class="text-on-surface-variant hover:text-on-surface transition-colors flex items-center cursor-pointer" title="Next Track" type="button">
+<span class="material-symbols-outlined text-lg">skip_next</span>
+</button>
+<button id="footer-loop-btn" onclick="toggleLoop()" class="text-on-surface-variant hover:text-on-surface transition-colors flex items-center cursor-pointer" title="Repeat Queue" type="button">
+<span class="material-symbols-outlined text-sm">repeat</span>
+</button>
+</div>
+
+<div class="w-full flex items-center gap-space-sm">
+<span id="footer-time-current" class="font-technical-mono text-technical-mono text-on-surface-variant w-10 text-right">00:00</span>
+<div id="footer-scrub-bar" class="relative flex-1 h-1 bg-surface-variant rounded-full overflow-hidden cursor-pointer group">
+<div id="footer-scrub-progress" class="h-full bg-primary rounded-full transition-all" style="width: 0%"></div>
+</div>
+<span id="footer-time-total" class="font-technical-mono text-technical-mono text-on-surface-variant w-10">00:00</span>
+</div>
+</div>
+
+<!-- Right Volume & Mode Status -->
+<div class="flex items-center justify-end gap-space-md min-w-[240px]">
+<span class="hidden lg:inline-flex items-center px-space-xs py-0.5 rounded bg-surface-container-high text-on-surface-variant font-technical-mono text-technical-mono uppercase tracking-wider">Strict Stop-on-End</span>
+<div class="flex items-center gap-2">
+<button onclick="toggleMute()" class="text-on-surface-variant hover:text-on-surface transition-colors flex items-center cursor-pointer p-0.5" title="Toggle Mute (M)" type="button">
+<span id="footer-volume-icon" class="material-symbols-outlined text-base">volume_up</span>
+</button>
+<div id="footer-volume-slider" class="w-24 h-1.5 bg-surface-variant rounded-full overflow-hidden cursor-pointer flex items-center" title="Volume Slider (+ / - or Shift + Up/Down)">
+<div id="footer-volume-bar" class="h-full bg-primary rounded-full transition-all duration-100" style="width: 100%"></div>
+</div>
+</div>
+<button id="footer-pip-btn" onclick="toggleMiniPlayer()" class="p-space-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all flex items-center justify-center cursor-pointer" title="Mini-Player / Picture-in-Picture" type="button">
+<span class="material-symbols-outlined text-base">picture_in_picture_alt</span>
+</button>
+<button onclick="scrollToQueue()" class="p-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all flex items-center justify-center cursor-pointer" title="Focus Queue" type="button">
+<span class="material-symbols-outlined text-base">queue_music</span>
+</button>
+</div>
+
+</div>
+</footer>
+
+<!-- Slide-over Drawer Backdrop & Drawer Panel for Top Bar Advisor Trigger -->
+<div id="ai-advisor-drawer-backdrop" onclick="closeAiAdvisorDrawer()" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity opacity-0 pointer-events-none"></div>
+
+<aside id="ai-advisor-drawer" class="fixed top-0 right-0 z-50 h-full w-full max-w-md bg-surface-container shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-out border-l amoled-border">
+  <!-- Drawer Header -->
+  <div class="p-space-md border-b amoled-border flex items-center justify-between">
+    <div class="flex items-center gap-space-xs">
+      <span class="material-symbols-outlined text-primary text-xl">auto_awesome</span>
+      <div>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface">AI Track Advisor</h2>
+        <span class="font-technical-mono text-[10px] text-tertiary flex items-center gap-1">
+          <span class="material-symbols-outlined text-xs">verified</span>
+          SUGGESTIONS ONLY • NEVER AUTOPLAYS
+        </span>
+      </div>
+    </div>
+    <button onclick="closeAiAdvisorDrawer()" class="p-1 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer" title="Close Drawer" type="button">
+      <span class="material-symbols-outlined text-xl">close</span>
+    </button>
+  </div>
+
+  <!-- Drawer Body -->
+  <div class="flex-1 overflow-y-auto p-space-md flex flex-col gap-space-md">
+    <!-- Active Song Reference Banner -->
+    <div class="p-space-sm rounded-lg bg-surface-container-low border border-outline-variant/15 flex items-center gap-space-xs">
+      <span class="material-symbols-outlined text-outline text-lg flex-shrink-0">headphones</span>
+      <div class="min-w-0 flex-1">
+        <span class="font-technical-mono text-[10px] text-on-surface-variant block uppercase">Based on playing track</span>
+        <span id="ai-drawer-current-title" class="font-label-md text-xs text-on-surface truncate block">No track loaded</span>
+      </div>
+    </div>
+
+    <!-- Quick Vibe Steering Pills in Drawer -->
+    <div class="flex flex-col gap-1.5">
+      <div class="flex items-center justify-between">
+        <span class="font-label-md text-xs text-on-surface">Steer Recommendations</span>
+        <button onclick="refreshAiAdvisor(true)" class="flex items-center gap-1 text-[11px] font-technical-mono text-primary hover:underline cursor-pointer">
+          <span class="material-symbols-outlined text-xs">refresh</span> Refresh
+        </button>
+      </div>
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+        <button onclick="setAiVibe('same_vibe')" data-vibe="same_vibe" class="ai-vibe-pill px-2.5 py-1 rounded-full text-xs font-label-md whitespace-nowrap transition-all cursor-pointer bg-primary text-on-primary shadow-sm" type="button">
+          Same Vibe
+        </button>
+        <button onclick="setAiVibe('slowed')" data-vibe="slowed" class="ai-vibe-pill px-2.5 py-1 rounded-full text-xs font-label-md whitespace-nowrap transition-all cursor-pointer bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest" type="button">
+          Slowed / Bass
+        </button>
+        <button onclick="setAiVibe('remix')" data-vibe="remix" class="ai-vibe-pill px-2.5 py-1 rounded-full text-xs font-label-md whitespace-nowrap transition-all cursor-pointer bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest" type="button">
+          Mashups & Remixes
+        </button>
+        <button onclick="setAiVibe('discovery')" data-vibe="discovery" class="ai-vibe-pill px-2.5 py-1 rounded-full text-xs font-label-md whitespace-nowrap transition-all cursor-pointer bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest" type="button">
+          Fresh Discovery
+        </button>
+      </div>
+    </div>
+
+    <!-- Suggestions List in Drawer -->
+    <div id="ai-drawer-list" class="flex flex-col gap-2.5">
+      <!-- Injected dynamically -->
+    </div>
+  </div>
+
+  <!-- Drawer Footer Notice -->
+  <div class="p-space-sm px-space-md border-t amoled-border bg-surface-container-lowest flex items-center justify-between text-outline font-technical-mono text-[10px]">
+    <span>Strict Queue Protection Active</span>
+    <span class="text-tertiary">Zero Unprompted Ingestion</span>
+  </div>
+</aside>
+
+<!-- ================= LIVE SYNCED LYRICS & TIMESTAMP DROPS DRAWER ================= -->
+<div id="lyrics-drawer-backdrop" onclick="closeLyricsDrawer()" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity opacity-0 pointer-events-none"></div>
+
+<aside id="lyrics-drawer" class="fixed top-0 right-0 z-50 h-full w-full max-w-md bg-surface-container shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-out border-l amoled-border">
+  <!-- Drawer Header -->
+  <div class="p-space-md border-b amoled-border flex items-center justify-between">
+    <div class="flex items-center gap-space-xs">
+      <span class="material-symbols-outlined text-primary text-xl">lyrics</span>
+      <div>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface">Lyrics & Drops</h2>
+        <span id="lyrics-track-status" class="font-technical-mono text-[10px] text-tertiary block truncate max-w-[240px]">Real-time Lyrics Synced</span>
+      </div>
+    </div>
+    <button onclick="closeLyricsDrawer()" class="p-1 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer" title="Close Drawer">
+      <span class="material-symbols-outlined text-xl">close</span>
+    </button>
+  </div>
+
+  <!-- Dual Tab Selector -->
+  <div class="flex items-center border-b amoled-border bg-surface-container-low px-space-md pt-2">
+    <button id="tab-lyrics-btn" onclick="switchLyricsTab('lyrics')" class="flex-1 pb-2 border-b-2 border-primary text-primary font-label-md text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-all">
+      <span class="material-symbols-outlined text-sm">music_note</span>
+      <span>Synced Lyrics</span>
+    </button>
+    <button id="tab-drops-btn" onclick="switchLyricsTab('drops')" class="flex-1 pb-2 border-b-2 border-transparent text-on-surface-variant hover:text-on-surface font-label-md text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-all">
+      <span class="material-symbols-outlined text-sm">bookmark</span>
+      <span>Drop Bookmarks</span>
+      <span id="drops-count-badge" class="px-1.5 py-0.2 rounded-full bg-surface-container-highest text-[10px] font-technical-mono">0</span>
+    </button>
+  </div>
+
+  <!-- Drawer Body -->
+  <div class="flex-1 overflow-y-auto p-space-md flex flex-col gap-space-md">
+    <!-- PANEL 1: SYNCED LYRICS -->
+    <div id="lyrics-tab-content" class="flex flex-col gap-space-sm flex-1">
+      <div id="lyrics-lines-container" class="flex flex-col gap-3 py-4 text-center select-none">
+        <!-- Injected dynamically via JS -->
+      </div>
+    </div>
+
+    <!-- PANEL 2: TIMESTAMP DROP BOOKMARKS -->
+    <div id="drops-tab-content" class="hidden flex-col gap-space-md">
+      <!-- Pin Current Timestamp Card -->
+      <div class="p-space-sm rounded-xl bg-surface-container-low border border-outline-variant/15 flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <span class="font-label-md text-xs text-on-surface font-semibold">Mark Favorite Drop / Section</span>
+          <span id="drops-current-time-peek" class="font-technical-mono text-primary text-xs font-bold">00:00</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <input id="drop-label-input" type="text" placeholder="Drop label (e.g. Bass Drop, Guitar Solo)" class="flex-1 h-8 px-2.5 rounded-lg bg-surface-container text-on-surface text-xs font-body-sm amoled-border outline-none focus:ring-1 focus:ring-primary" value="Beat Drop">
+          <button onclick="pinCurrentTimestamp()" class="h-8 px-3 rounded-lg bg-primary hover:bg-secondary text-on-primary font-label-md text-xs font-bold transition-all cursor-pointer flex items-center gap-1 flex-shrink-0">
+            <span class="material-symbols-outlined text-xs">add_location_alt</span>
+            <span>Pin Now</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Saved Bookmarks List -->
+      <div class="flex flex-col gap-1.5">
+        <span class="font-technical-mono text-[10px] text-outline uppercase tracking-wider">Saved Track Marks</span>
+        <div id="drops-list-container" class="flex flex-col gap-1.5">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drawer Footer Notice -->
+  <div class="p-space-sm px-space-md border-t amoled-border bg-surface-container-lowest flex items-center justify-between text-outline font-technical-mono text-[10px]">
+    <span>Zero API Key LRCLIB Engine</span>
+    <span class="text-tertiary">Realtime Scrub Synced</span>
+  </div>
+</aside>
+
+<!-- ================= PER-TRACK DJ TUNING MODAL / POPOVER ================= -->
+<div id="track-tuning-modal" onclick="closeTrackTuningModal()" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity opacity-0 flex items-center justify-center p-4">
+  <div onclick="event.stopPropagation()" class="relative w-full max-w-sm bg-surface-container rounded-2xl shadow-2xl p-space-md flex flex-col gap-space-md amoled-border animate-fadeIn">
+    <!-- Header -->
+    <div class="flex items-center justify-between border-b amoled-border pb-space-xs">
+      <div class="flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-primary text-lg">tune</span>
+        <h3 class="font-headline-sm text-sm text-on-surface">Track DJ Tuning</h3>
+      </div>
+      <button onclick="closeTrackTuningModal()" class="text-on-surface-variant hover:text-on-surface p-1 rounded">
+        <span class="material-symbols-outlined text-base">close</span>
+      </button>
+    </div>
+
+    <!-- Active Song Title -->
+    <div class="p-space-xs px-space-sm rounded-lg bg-surface-container-low flex items-center gap-2">
+      <span class="material-symbols-outlined text-outline text-base">music_note</span>
+      <span id="tuning-track-title" class="font-label-md text-xs text-on-surface truncate">Track Title</span>
+    </div>
+
+    <!-- Tuning Fields -->
+    <div class="flex flex-col gap-space-sm text-xs">
+      <!-- Start & End Trim -->
+      <div class="grid grid-cols-2 gap-2">
+        <div class="flex flex-col gap-1">
+          <label class="font-technical-mono text-[11px] text-on-surface-variant">Start At (mm:ss)</label>
+          <input id="tuning-start-at" type="text" placeholder="00:00" class="h-8 px-2 rounded bg-surface-container-low text-on-surface font-technical-mono text-xs amoled-border outline-none focus:ring-1 focus:ring-primary">
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-technical-mono text-[11px] text-on-surface-variant">End At (mm:ss)</label>
+          <input id="tuning-end-at" type="text" placeholder="Auto" class="h-8 px-2 rounded bg-surface-container-low text-on-surface font-technical-mono text-xs amoled-border outline-none focus:ring-1 focus:ring-primary">
+        </div>
+      </div>
+
+      <!-- Playback Speed Presets -->
+      <div class="flex flex-col gap-1">
+        <div class="flex items-center justify-between">
+          <span class="font-technical-mono text-[11px] text-on-surface-variant">Playback Rate</span>
+          <span id="tuning-speed-display" class="font-technical-mono text-primary text-[11px] font-bold">1.0x</span>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5" id="tuning-speed-pills">
+          <button onclick="setTuningSpeed(0.85)" data-speed="0.85" class="py-1 rounded bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant text-xs font-technical-mono cursor-pointer transition-all">0.85x Slowed</button>
+          <button onclick="setTuningSpeed(1.0)" data-speed="1.0" class="py-1 rounded bg-primary text-on-primary text-xs font-technical-mono cursor-pointer transition-all font-bold">1.0x Normal</button>
+          <button onclick="setTuningSpeed(1.15)" data-speed="1.15" class="py-1 rounded bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant text-xs font-technical-mono cursor-pointer transition-all">1.15x Sped Up</button>
+        </div>
+      </div>
+
+      <!-- Gain Offset Slider (-20% to +20%) -->
+      <div class="flex flex-col gap-1 pt-1">
+        <div class="flex items-center justify-between">
+          <span class="font-technical-mono text-[11px] text-on-surface-variant">Volume Gain Offset</span>
+          <span id="tuning-gain-display" class="font-technical-mono text-primary text-[11px] font-bold">0%</span>
+        </div>
+        <input id="tuning-gain-slider" type="range" min="-20" max="20" step="1" value="0" class="w-full h-1.5 bg-surface-variant rounded-lg appearance-none cursor-pointer accent-primary focus:outline-none">
+        <div class="flex justify-between font-technical-mono text-[9px] text-outline">
+          <span>-20%</span>
+          <span>0% Normal</span>
+          <span>+20%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center justify-end gap-2 pt-space-xs border-t amoled-border">
+      <button onclick="closeTrackTuningModal()" class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-xs cursor-pointer">
+        Cancel
+      </button>
+      <button onclick="saveTrackTuning()" class="px-4 py-1.5 rounded-lg bg-primary hover:bg-secondary text-on-primary font-label-md text-xs font-bold transition-all cursor-pointer shadow-sm">
+        Save DJ Settings
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= INTERACTIVE OVERVIEW MODAL ("HOW IT WORKS") ================= -->
+<div id="overview-modal-backdrop" onclick="closeOverviewModal()" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md transition-opacity opacity-0 flex items-center justify-center p-space-sm sm:p-space-md">
+  <div onclick="event.stopPropagation()" class="relative w-full max-w-2xl bg-surface-container rounded-2xl shadow-2xl p-space-md sm:p-space-lg flex flex-col gap-space-md amoled-border transform scale-95 transition-all duration-200">
+    <!-- Modal Header -->
+    <div class="flex items-start justify-between gap-space-sm border-b amoled-border pb-space-sm">
+      <div class="flex items-center gap-space-sm">
+        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-2xl">verified_user</span>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2">
+            <h2 class="font-headline-sm text-headline-sm text-on-surface">Welcome to StrictQueue</h2>
+            <span class="px-2 py-0.5 rounded bg-tertiary/10 text-tertiary font-technical-mono text-[10px] uppercase font-bold tracking-wider">Zero Autoplay</span>
+          </div>
+          <p class="font-body-sm text-xs text-on-surface-variant">Your music. Your rules. An audiophile workstation with zero algorithmic auto-recommendations.</p>
+        </div>
+      </div>
+      <button onclick="closeOverviewModal()" class="p-1 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer flex-shrink-0" title="Close Overview">
+        <span class="material-symbols-outlined text-xl">close</span>
+      </button>
+    </div>
+
+    <!-- 4 Interactive Overview Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm max-h-[60vh] overflow-y-auto pr-0.5">
+      <!-- Step 1: Zero-Autoplay Guarantee -->
+      <div class="p-space-md rounded-xl bg-surface-container-low border border-outline-variant/15 flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5 text-primary">
+            <span class="material-symbols-outlined text-lg">shield</span>
+            <span class="font-technical-mono text-xs font-bold uppercase">Step 1</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-technical-mono">Core Ethos</span>
+        </div>
+        <h4 class="font-label-md text-sm text-on-surface font-semibold">Strict Queue Isolation</h4>
+        <p class="font-body-sm text-xs text-on-surface-variant leading-relaxed">
+          YouTube algorithms, sponsored mixes, and surprise autoplay tracks will <strong class="text-on-surface">never play</strong>. Playback halts automatically when your manual tracklist completes.
+        </p>
+      </div>
+
+      <!-- Step 2: Search, Paste, or Speak -->
+      <div class="p-space-md rounded-xl bg-surface-container-low border border-outline-variant/15 flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5 text-secondary">
+            <span class="material-symbols-outlined text-lg">mic</span>
+            <span class="font-technical-mono text-xs font-bold uppercase">Step 2</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded bg-secondary/10 text-secondary text-[10px] font-technical-mono">Voice & Text</span>
+        </div>
+        <h4 class="font-label-md text-sm text-on-surface font-semibold">Search, Paste, or Speak</h4>
+        <p class="font-body-sm text-xs text-on-surface-variant leading-relaxed">
+          Paste direct YouTube URLs, search any song or artist name, or click the <strong class="text-on-surface">Microphone button</strong> to search or queue songs hands-free.
+        </p>
+      </div>
+
+      <!-- Step 3: AI Track Advisor -->
+      <div class="p-space-md rounded-xl bg-surface-container-low border border-outline-variant/15 flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5 text-tertiary">
+            <span class="material-symbols-outlined text-lg">auto_awesome</span>
+            <span class="font-technical-mono text-xs font-bold uppercase">Step 3</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded bg-tertiary/10 text-tertiary text-[10px] font-technical-mono">Suggest-Only</span>
+        </div>
+        <h4 class="font-label-md text-sm text-on-surface font-semibold">AI Track Advisor</h4>
+        <p class="font-body-sm text-xs text-on-surface-variant leading-relaxed">
+          Get smart, contextual song suggestions based on the active track and your chosen vibe (<strong class="text-on-surface">Slowed</strong>, <strong class="text-on-surface">Remix</strong>, etc.). Only added when you explicitly click!
+        </p>
+      </div>
+
+      <!-- Step 4: Pro Shortcuts -->
+      <div class="p-space-md rounded-xl bg-surface-container-low border border-outline-variant/15 flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5 text-primary">
+            <span class="material-symbols-outlined text-lg">keyboard</span>
+            <span class="font-technical-mono text-xs font-bold uppercase">Step 4</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-technical-mono">Shortcuts</span>
+        </div>
+        <h4 class="font-label-md text-sm text-on-surface font-semibold">Pro Keyboard & Voice</h4>
+        <div class="font-technical-mono text-[11px] text-on-surface-variant flex flex-col gap-1 leading-normal">
+          <div class="flex items-center justify-between"><span>Play / Pause</span><kbd class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface text-[10px]">Space</kbd></div>
+          <div class="flex items-center justify-between"><span>Volume &plusmn;5%</span><kbd class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface text-[10px]">+ / -</kbd></div>
+          <div class="flex items-center justify-between"><span>Page Scroll</span><kbd class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface text-[10px]">&uarr; / &darr;</kbd></div>
+          <div class="flex items-center justify-between"><span>Voice Command</span><span class="text-primary text-[10px]">"Queue [song]"</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-space-sm pt-space-xs border-t amoled-border">
+      <label class="flex items-center gap-2 cursor-pointer text-xs text-on-surface-variant hover:text-on-surface transition-colors select-none">
+        <input id="overview-dont-show-checkbox" type="checkbox" class="accent-primary rounded">
+        <span>Don't show this automatically on launch</span>
+      </label>
+      <button onclick="dismissOverviewModal()" class="w-full sm:w-auto px-space-lg py-2 rounded-xl bg-primary hover:bg-secondary text-on-primary font-label-md text-sm font-bold shadow-md neon-glow transition-all cursor-pointer text-center" type="button">
+        Got it, Start Listening
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= FLOATING MINI-PLAYER WIDGET (FALLBACK & ACTIVE TAB COMPANION) ================= -->
+<div id="floating-mini-player" class="hidden fixed bottom-24 right-6 z-50 w-80 bg-surface-container rounded-2xl shadow-2xl p-space-sm amoled-border flex flex-col gap-2 backdrop-blur-xl animate-fadeIn">
+  <!-- Mini Player Header -->
+  <div class="flex items-center justify-between pb-1 border-b amoled-border text-xs">
+    <div class="flex items-center gap-1.5 text-primary font-technical-mono">
+      <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+      <span class="text-[10px] uppercase font-bold tracking-wider">Mini-Player</span>
+    </div>
+    <div class="flex items-center gap-1">
+      <button onclick="toggleMiniPlayerWindow()" class="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer" title="Pop out into Document Picture-in-Picture window">
+        <span class="material-symbols-outlined text-sm">open_in_new</span>
+      </button>
+      <button onclick="closeFloatingMiniPlayer()" class="p-1 rounded text-on-surface-variant hover:text-error hover:bg-surface-container-high transition-colors cursor-pointer" title="Close Mini-Player">
+        <span class="material-symbols-outlined text-sm">close</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Track Info Row -->
+  <div class="flex items-center gap-space-sm min-w-0">
+    <div class="relative w-16 h-11 rounded-lg bg-surface-container-highest flex-shrink-0 overflow-hidden shadow">
+      <img id="mini-player-thumb" src="logo.jpg" alt="Artwork" class="w-full h-full object-cover">
+    </div>
+    <div class="flex flex-col min-w-0 flex-1">
+      <span id="mini-player-title" class="font-label-md text-xs text-on-surface truncate font-semibold">StrictQueue Player</span>
+      <span id="mini-player-artist" class="font-body-sm text-[11px] text-on-surface-variant truncate">Direct Session</span>
+    </div>
+  </div>
+
+  <!-- Mini Player Controls -->
+  <div class="flex items-center justify-between pt-1">
+    <div class="flex items-center gap-2">
+      <button onclick="playPrev()" class="text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer" title="Previous Track">
+        <span class="material-symbols-outlined text-base">skip_previous</span>
+      </button>
+      <button id="mini-player-play-btn" onclick="togglePlayPause()" class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center transition-all cursor-pointer shadow-md" title="Play / Pause">
+        <span class="material-symbols-outlined text-base">play_arrow</span>
+      </button>
+      <button onclick="playNext()" class="text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer" title="Next Track">
+        <span class="material-symbols-outlined text-base">skip_next</span>
+      </button>
+    </div>
+    <div class="flex items-center gap-1.5 text-on-surface-variant text-xs">
+      <button onclick="toggleMute()" class="hover:text-primary transition-colors cursor-pointer">
+        <span id="mini-player-vol-icon" class="material-symbols-outlined text-sm">volume_up</span>
+      </button>
+      <button onclick="scrollToQueue(); closeFloatingMiniPlayer();" class="hover:text-primary transition-colors cursor-pointer" title="Open Queue">
+        <span class="material-symbols-outlined text-sm">queue_music</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Application Logic Bundle -->
+<script src="app.js"></script>
+
+</body></html>
